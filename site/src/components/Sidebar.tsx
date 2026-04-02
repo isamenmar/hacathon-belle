@@ -15,13 +15,19 @@ const nav = [
   { href: "/setores/parceiros", label: "Parceiros", icon: "🤝" },
   { href: "/setores/marketplace", label: "Marketplace", icon: "🛒" },
   { href: "/setores/expansao", label: "Expansão", icon: "🚀" },
-  { label: "EMPREENDIMENTOS", divider: true },
+  { label: "EMPREENDIMENTOS", divider: true, count: 12 },
+  { href: "/empreendimentos/ponta-das-canas-spot-ii", label: "Ponta das Canas II", icon: "🏗️" },
+  { href: "/empreendimentos/natal-spot", label: "Natal Spot", icon: "🏗️" },
+  { href: "/empreendimentos/barra-grande-spot", label: "Barra Grande", icon: "🏗️" },
+  { href: "/empreendimentos/jurere-spot-iii", label: "Jurerê III", icon: "🏗️" },
+  { href: "/empreendimentos/jurere-spot-ii", label: "Jurerê II", icon: "🏗️" },
   { href: "/empreendimentos/marista-144-spot", label: "Marista 144", icon: "🏗️" },
-  { href: "/empreendimentos/urubici-spot-ii", label: "Urubici II", icon: "🏗️" },
   { href: "/empreendimentos/vistas-de-anita-2", label: "Vistas de Anitá", icon: "🏗️" },
-  { href: "/empreendimentos/santinho-spot", label: "Santinho", icon: "🏗️" },
-  { href: "/empreendimentos/batel-spot", label: "Batel", icon: "🏗️" },
   { href: "/empreendimentos/caragua-spot", label: "Caraguá", icon: "🏗️" },
+  { href: "/empreendimentos/santinho-spot", label: "Santinho", icon: "🏗️" },
+  { href: "/empreendimentos/bonito-spot", label: "Bonito", icon: "🏗️" },
+  { href: "/empreendimentos/meireles-spot", label: "Meireles", icon: "🏗️" },
+  { href: "/empreendimentos/foz-spot", label: "Foz", icon: "🏗️" },
 ];
 
 export default function Sidebar() {
@@ -42,10 +48,15 @@ export default function Sidebar() {
       <nav className="flex-1 p-3 space-y-0.5">
         {nav.map((item, i) =>
           item.divider ? (
-            <div key={i} className="pt-4 pb-1 px-3">
+            <div key={i} className="pt-4 pb-1 px-3 flex items-center justify-between">
               <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest">
                 {item.label}
               </span>
+              {item.count && (
+                <span className="text-[9px] font-medium text-gray-500 bg-white/5 px-1.5 py-0.5 rounded">
+                  {item.count}
+                </span>
+              )}
             </div>
           ) : (
             <Link
