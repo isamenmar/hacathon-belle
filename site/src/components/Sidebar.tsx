@@ -35,12 +35,10 @@ export default function Sidebar() {
   return (
     <aside className="hidden lg:flex lg:flex-col w-64 bg-[#0F1B2D] overflow-y-auto">
       <div className="p-5 border-b border-white/10">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#F06B5D] rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">SZ</span>
-          </div>
+        <div className="flex items-center gap-3">
+          <img src="/seazone-logo.png" alt="Seazone" className="w-9 h-9 rounded-lg object-contain" />
           <div>
-            <h1 className="text-lg font-bold text-white">Belle Analytics</h1>
+            <h1 className="text-lg font-bold text-white">Seazone Saleszone</h1>
             <p className="text-[10px] text-gray-400">Seazone Investimentos</p>
           </div>
         </div>
