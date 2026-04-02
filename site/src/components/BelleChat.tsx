@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { belleKnowledge, formatCurrency, formatNumber, pipelineOverview, metricasComerciais, miaData, funnelByChannel, setores, funnelByEmpreendimento, facebookCampaigns2026, lostReasons } from "@/data";
+import { belleKnowledge, formatCurrency, formatNumber, pipelineOverview, metricasComerciais, miaData, funnelByChannel, setores, funnelByEmpreendimento, facebookCampaigns2026, lostReasons, squads, empHealthScores } from "@/data";
 
 interface Message {
   role: "user" | "belle";
@@ -55,6 +55,17 @@ function generateResponse(input: string): string {
     const best = funnelByEmpreendimento.filter(e => e.cpw > 0).sort((a, b) => a.cpw - b.cpw)[0];
     const worst = funnelByEmpreendimento.filter(e => e.cpw > 0).sort((a, b) => b.cpw - a.cpw)[0];
     return `🏗️ **Análise de Empreendimentos**\n\n✅ **Melhor CPW:** ${best.nome} (R$ ${best.cpw.toFixed(2)}) - ${best.won} vendas\n❌ **Pior CPW:** ${worst.nome} (R$ ${formatNumber(worst.cpw)}) - ${worst.won} vendas\n\n**Top 3 por volume de vendas:**\n${funnelByEmpreendimento.sort((a, b) => b.won - a.won).slice(0, 3).map(e => `• ${e.nome}: ${e.won} won`).join("\n")}`;
+  }
+
+  // Squads
+  if (q.includes("squad") || q.includes("hellen") || q.includes("lua") || q.includes("jeni") || q.includes("filipe") || q.includes("pior squad") || q.includes("melhor squad") || q.includes("problema")) {
+    const sorted = [...squads].sort((a, b) => b.score - a.score);
+    const best = sorted[0];
+    const worst = sorted[sorted.length - 1];
+    return `⚡ **Squads Comerciais**\n\n${squads.map(sq => {
+      const icon = sq.status === "saudavel" ? "🟢" : sq.status === "atencao" ? "🟡" : "🔴";
+      return `${icon} **${sq.nome}**\n  Score: ${sq.score} | Ocupação: ${sq.ocupacao}% | Won: ${sq.metricas.won}\n  Membros: ${sq.membros.map(m => m.nome).join(", ")}\n  Alertas: ${sq.alertas.length > 0 ? sq.alertas[0] : "Nenhum"}`;
+    }).join("\n\n")}\n\n**Melhor squad:** ${best.nome} (score ${best.score})\n**Squad com mais alertas:** ${worst.nome} (${worst.alertas.length} alertas)\n\n**Ação recomendada:** ${worst.alertas.length > 0 ? worst.alertas[0] : "Manter operação atual"}`;
   }
 
   // Setores

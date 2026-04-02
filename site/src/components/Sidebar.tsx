@@ -7,6 +7,7 @@ const nav = [
   { href: "/marketing", label: "Marketing", icon: "📣" },
   { href: "/time", label: "Time", icon: "👥" },
   { href: "/mia", label: "MIA (IA)", icon: "🤖" },
+  { href: "/squads", label: "Squads", icon: "⚡" },
   { label: "SETORES", divider: true },
   { href: "/setores/szi", label: "SZI", icon: "🏢" },
   { href: "/setores/szs", label: "SZS", icon: "🏠" },

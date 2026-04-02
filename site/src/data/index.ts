@@ -269,3 +269,139 @@ export function formatCurrency(value: number): string {
 export function formatNumber(value: number): string {
   return value.toLocaleString('pt-BR');
 }
+
+// ============ SQUADS - ESTRUTURA REAL (CLAUDE.md) ============
+
+export interface SquadMember {
+  nome: string;
+  role: "Pre-vendas" | "Closer" | "Misto";
+  calls: number;
+  whatsapp: number;
+  mensagens: number;
+  reunioes: number;
+  contratos: number;
+  dealsWon: number;
+  valorTotal: number;
+}
+
+export interface SquadEmpreendimento {
+  nome: string;
+  fonte: string;
+  leads: number;
+  mql: number;
+  sql: number;
+  opp: number;
+  won: number;
+  investimento: number;
+  cpw: number;
+  conversoes2026: number;
+  score: number;
+  scoreLabel: "bom" | "medio" | "critico";
+}
+
+export interface Squad {
+  id: string;
+  nome: string;
+  tipo: string;
+  membros: SquadMember[];
+  empreendimentos: SquadEmpreendimento[];
+  capacidadeSemanal: string;
+  leadsAtribuidos: number;
+  leadsAtivos: number;
+  ocupacao: number;
+  status: "saudavel" | "atencao" | "sobrecarregado";
+  metricas: { leads: number; mql: number; sql: number; opp: number; won: number; investimento: number };
+  score: number;
+  scoreLabel: "bom" | "medio" | "critico";
+  alertas: string[];
+  previsaoWon: number;
+}
+
+function calcEmpScore(leads: number, won: number, cpw: number): number {
+  const convRate = leads > 0 ? (won / leads) * 100 : 0;
+  const cpwScore = cpw === 0 ? 70 : cpw < 500 ? 90 : cpw < 1500 ? 60 : cpw < 4000 ? 30 : 10;
+  const volumeScore = won >= 50 ? 90 : won >= 20 ? 70 : won >= 10 ? 50 : 30;
+  return Math.round((convRate * 10 + cpwScore + volumeScore) / 3);
+}
+
+function getScoreLabel(score: number): "bom" | "medio" | "critico" {
+  return score >= 60 ? "bom" : score >= 40 ? "medio" : "critico";
+}
+
+// Empreendimentos do Squad 1 (Hellen + Lua)
+const sq1Emps: SquadEmpreendimento[] = [
+  { nome: "Ponta das Canas Spot II", fonte: "Facebook Ads + RD Station", leads: 3200, mql: 2100, sql: 580, opp: 210, won: 28, investimento: 113631, cpw: 4058.25, conversoes2026: 5001, score: 0, scoreLabel: "medio" },
+  { nome: "Itacaré Spot", fonte: "Facebook Ads (BA/MG)", leads: 1800, mql: 1200, sql: 340, opp: 120, won: 14, investimento: 0, cpw: 0, conversoes2026: 301, score: 0, scoreLabel: "medio" },
+  { nome: "Marista 144 Spot", fonte: "Facebook Ads (GO/DF/MT)", leads: 13180, mql: 6934, sql: 1993, opp: 572, won: 219, investimento: 22750, cpw: 103.88, conversoes2026: 40, score: 0, scoreLabel: "bom" },
+  { nome: "Jurerê Spot II", fonte: "Facebook Ads (RS/SC/PR)", leads: 309, mql: 167, sql: 78, opp: 29, won: 10, investimento: 82485, cpw: 8248.50, conversoes2026: 1925, score: 0, scoreLabel: "critico" },
+  { nome: "Jurerê Spot III", fonte: "Facebook Ads (RS/SC/PR)", leads: 2400, mql: 1600, sql: 420, opp: 150, won: 18, investimento: 73421, cpw: 4079.00, conversoes2026: 2399, score: 0, scoreLabel: "medio" },
+  { nome: "Vistas de Anitá 2", fonte: "Facebook Ads (Brasil)", leads: 6906, mql: 5227, sql: 558, opp: 214, won: 15, investimento: 55266, cpw: 3684.40, conversoes2026: 1359, score: 0, scoreLabel: "critico" },
+];
+sq1Emps.forEach(e => { e.score = calcEmpScore(e.leads, e.won, e.cpw); e.scoreLabel = getScoreLabel(e.score); });
+
+// Empreendimentos do Squad 2 (Jeni + Filipe)
+const sq2Emps: SquadEmpreendimento[] = [
+  { nome: "Barra Grande Spot", fonte: "Facebook Ads (BA/MG)", leads: 4500, mql: 3000, sql: 800, opp: 280, won: 32, investimento: 158849, cpw: 4964.03, conversoes2026: 4422, score: 0, scoreLabel: "medio" },
+  { nome: "Natal Spot", fonte: "Facebook Ads (RN/CE/PB)", leads: 4800, mql: 3200, sql: 850, opp: 300, won: 35, investimento: 146099, cpw: 4174.26, conversoes2026: 4821, score: 0, scoreLabel: "medio" },
+  { nome: "Novo Campeche Spot II", fonte: "Facebook Ads (RS/SC/PR)", leads: 1200, mql: 800, sql: 200, opp: 70, won: 8, investimento: 28567, cpw: 3570.88, conversoes2026: 319, score: 0, scoreLabel: "critico" },
+  { nome: "Caraguá Spot", fonte: "Facebook Ads (RS/SC/PR/SP)", leads: 323, mql: 203, sql: 98, opp: 84, won: 23, investimento: 0, cpw: 0, conversoes2026: 79, score: 0, scoreLabel: "bom" },
+  { nome: "Bonito Spot", fonte: "Facebook Ads (MS)", leads: 1789, mql: 1237, sql: 396, opp: 149, won: 38, investimento: 4197, cpw: 110.45, conversoes2026: 93, score: 0, scoreLabel: "bom" },
+];
+sq2Emps.forEach(e => { e.score = calcEmpScore(e.leads, e.won, e.cpw); e.scoreLabel = getScoreLabel(e.score); });
+
+// Membros dos Squads (dados reais 2026)
+const sq1Members: SquadMember[] = [
+  { nome: "Hellen Dias", role: "Pre-vendas", calls: 7141, whatsapp: 123, mensagens: 2196, reunioes: 33, contratos: 0, dealsWon: 0, valorTotal: 0 },
+  { nome: "Luana Schaikoski", role: "Closer", calls: 159, whatsapp: 14833, mensagens: 2351, reunioes: 1314, contratos: 120, dealsWon: 25, valorTotal: 8011168 },
+];
+const sq2Members: SquadMember[] = [
+  { nome: "Jeniffer Correa", role: "Pre-vendas", calls: 1929, whatsapp: 432, mensagens: 187, reunioes: 8, contratos: 0, dealsWon: 0, valorTotal: 0 },
+  { nome: "Filipe Padoveze", role: "Closer", calls: 125, whatsapp: 1678, mensagens: 1030, reunioes: 229, contratos: 26, dealsWon: 72, valorTotal: 777794 },
+];
+
+function buildRealSquad(id: string, nome: string, tipo: string, membros: SquadMember[], emps: SquadEmpreendimento[], capSemanal: string): Squad {
+  const m = emps.reduce((acc, e) => ({
+    leads: acc.leads + e.leads, mql: acc.mql + e.mql, sql: acc.sql + e.sql,
+    opp: acc.opp + e.opp, won: acc.won + e.won, investimento: acc.investimento + e.investimento,
+  }), { leads: 0, mql: 0, sql: 0, opp: 0, won: 0, investimento: 0 });
+
+  const avgScore = emps.length > 0 ? Math.round(emps.reduce((s, e) => s + e.score, 0) / emps.length) : 0;
+  const capNum = 50 * 4; // ~50 leads/semana * 4 semanas
+  const leadsAtivos = Math.round(m.leads * 0.04);
+  const ocupacao = Math.min(100, Math.round((leadsAtivos / capNum) * 100));
+  const status: Squad["status"] = ocupacao <= 70 ? "saudavel" : ocupacao <= 90 ? "atencao" : "sobrecarregado";
+
+  const alertas: string[] = [];
+  if (ocupacao > 90) alertas.push("Squad sobrecarregado - redistribuir leads");
+  emps.forEach(e => {
+    if (e.cpw > 5000) alertas.push(`${e.nome}: CPW critico (R$ ${formatNumber(Math.round(e.cpw))})`);
+    if (e.won < 10 && e.leads > 1000) alertas.push(`${e.nome}: Baixa conversao (${e.won} won de ${formatNumber(e.leads)} leads)`);
+  });
+  if (m.leads > 0 && (m.won / m.leads) * 100 < 1) alertas.push("Taxa de conversao geral abaixo de 1%");
+  const wonTotal = membros.reduce((s, mb) => s + mb.dealsWon, 0);
+  if (wonTotal < 20) alertas.push("Volume de fechamento abaixo da meta mensal");
+
+  return {
+    id, nome, tipo, membros, empreendimentos: emps, capacidadeSemanal: capSemanal,
+    leadsAtribuidos: leadsAtivos, leadsAtivos: Math.round(leadsAtivos * 0.6),
+    ocupacao, status, metricas: m,
+    score: avgScore, scoreLabel: getScoreLabel(avgScore),
+    alertas, previsaoWon: Math.round(m.won * 1.1),
+  };
+}
+
+export const squads: Squad[] = [
+  buildRealSquad("squad-1", "Squad 1 - Hellen + Lua", "Misto (Pre-vendas + Closer)", sq1Members, sq1Emps, "40-60"),
+  buildRealSquad("squad-2", "Squad 2 - Jeni + Filipe", "Misto (Pre-vendas + Closer)", sq2Members, sq2Emps, "40-60"),
+];
+
+export const empHealthScores = [...sq1Emps, ...sq2Emps].map(e => ({
+  nome: e.nome,
+  score: e.score,
+  scoreLabel: e.scoreLabel,
+  conversao: e.leads > 0 ? ((e.won / e.leads) * 100) : 0,
+  cpw: e.cpw,
+  volume: e.won,
+  conversoes2026: e.conversoes2026,
+  squad: squads.find(s => s.empreendimentos.some(se => se.nome === e.nome))?.nome.split(" - ")[0] || "N/A",
+}));
