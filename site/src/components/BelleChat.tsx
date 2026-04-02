@@ -120,10 +120,42 @@ function generateResponse(input: string): string {
     }).join("\n\n")}\n\n**Insight:** Canal Parceiros (Pipeline #7) converte 6,8x mais que MKT com custo zero.`;
   }
 
-  // --- PREVISAO ---
-  if (q.includes("previsao") || q.includes("forecast") || q.includes("projecao") || q.includes("futuro") || q.includes("tendencia") || q.includes("meta")) {
-    const prevTotal = squads.reduce((s, sq) => s + sq.previsaoWon, 0);
-    return `🔮 **Projecao e Tendencias**\n**Base:** Dados Jan-Mar/2026 extrapolados\n\n• **Media mensal 2026:** ~465 deals won/mes\n• **Projecao anual 2026:** ~5.580 deals\n• **Ticket medio atual:** R$ 53K (queda de 39% vs historico R$ 87K)\n• **Volume:** Compensando queda de ticket com mais deals\n\n**Previsao por Squad:**\n${squads.map(sq => `• ${sq.nome.split(" - ")[0]}: ${sq.previsaoWon} won (proximo periodo)`).join("\n")}\n• Total previsto: ${prevTotal} deals\n\n**Riscos:**\n• Win rate em queda (10,8% → 2,7%) pode reduzir volume futuro\n• MIA com 60% no-show limita pipeline\n\n**Oportunidades:**\n• Otimizar MIA: potencial +R$ 7-15M\n• Escalar Parceiros: ROI infinito\n• Realocar budget de empreendimentos criticos\n\n**Calculo:** Previsao = Won historico * 1.1 (crescimento estimado 10%)`;
+  // --- PREVISAO COMPLETA ---
+  if (q.includes("previsao") || q.includes("forecast") || q.includes("projecao") || q.includes("futuro") || q.includes("tendencia")) {
+    // Calculos base
+    const wonQ1 = 563 + 420 + 412; // Jan+Fev+Mar 2026
+    const mediaMensal = Math.round(wonQ1 / 3);
+    const ticketAtual = 53478;
+    const receitaMensalBase = mediaMensal * ticketAtual;
+    // Cenarios
+    const otimista = { deals: Math.round(mediaMensal * 1.15), ticket: Math.round(ticketAtual * 1.05) };
+    const realista = { deals: mediaMensal, ticket: ticketAtual };
+    const pessimista = { deals: Math.round(mediaMensal * 0.85), ticket: Math.round(ticketAtual * 0.9) };
+
+    return `🔮 **Previsao Completa - Proximo Trimestre (Abr-Jun/2026)**\n**Base:** Q1/2026 (${formatNumber(wonQ1)} deals, ${formatCurrency(wonQ1 * ticketAtual)})\n**Confianca:** MEDIA (dados de 3 meses disponiveis)\n\n**📊 CENARIOS:**\n\n**Otimista (+15% deals, +5% ticket):**\n• Deals: ${otimista.deals}/mes → ${otimista.deals * 3} no trimestre\n• Receita: ${formatCurrency(otimista.deals * otimista.ticket)}/mes → ${formatCurrency(otimista.deals * otimista.ticket * 3)} total\n• Premissas: MIA otimizada, Parceiros escalados\n\n**Realista (mantem Q1):**\n• Deals: ${realista.deals}/mes → ${realista.deals * 3} no trimestre\n• Receita: ${formatCurrency(receitaMensalBase)}/mes → ${formatCurrency(receitaMensalBase * 3)} total\n\n**Pessimista (-15% deals, -10% ticket):**\n• Deals: ${pessimista.deals}/mes → ${pessimista.deals * 3} no trimestre\n• Receita: ${formatCurrency(pessimista.deals * pessimista.ticket)}/mes → ${formatCurrency(pessimista.deals * pessimista.ticket * 3)} total\n• Risco: Win rate continua caindo\n\n**Por Squad:**\n${squads.map(sq => `• ${sq.nome.split(" - ")[0]}: ${sq.previsaoWon} won previstos`).join("\n")}\n\n**⚠️ ALERTAS PREDITIVOS:**\n• Win rate em queda → risco de volume menor\n• Pipeline atual (4.131 open) pode nao ser suficiente\n• MIA com 60% no-show reduz pipeline efetivo\n\n**Calculo:** Media Q1 × fator cenario. Confianca media pois base de apenas 3 meses.`;
+  }
+
+  // --- META ---
+  if (q.includes("meta") || q.includes("bater meta") || q.includes("falta") || q.includes("ritmo")) {
+    const wonQ1 = 563 + 420 + 412;
+    const mediaMensal = Math.round(wonQ1 / 3);
+    const metaAnual = 6000; // estimativa
+    const falta = metaAnual - wonQ1;
+    const mesesRestantes = 9;
+    const ritmoNecessario = Math.round(falta / mesesRestantes);
+    const prob = mediaMensal >= ritmoNecessario ? "ALTA" : mediaMensal >= ritmoNecessario * 0.85 ? "MEDIA" : "BAIXA";
+    return `🎯 **Analise de Meta**\n**Periodo:** 2026\n**Confianca:** ${prob}\n\n**Meta estimada anual:** ${formatNumber(metaAnual)} deals won\n**Realizado Q1 (Jan-Mar):** ${formatNumber(wonQ1)} deals (${((wonQ1 / metaAnual) * 100).toFixed(1)}%)\n**Faltam:** ${formatNumber(falta)} deals em ${mesesRestantes} meses\n\n**Ritmo necessario:** ${ritmoNecessario} deals/mes\n**Ritmo atual:** ${mediaMensal} deals/mes\n**Status:** ${mediaMensal >= ritmoNecessario ? "✅ No ritmo" : "⚠️ Abaixo do ritmo necessario"}\n\n**Probabilidade de bater meta:** ${prob}\n${prob !== "ALTA" ? `\n**O que precisa mudar:**\n• Aumentar volume de leads qualificados (+${ritmoNecessario - mediaMensal} deals/mes)\n• Melhorar win rate (de 2,7% para pelo menos 4%)\n• Reduzir no-show da MIA (de 60% para 30%)\n• Escalar canal Parceiros (custo zero, 6,8x mais conversao)` : "\n**Acao:** Manter ritmo e monitorar win rate."}\n\n**Calculo:** (Meta anual - Realizado) / Meses restantes = Ritmo necessario`;
+  }
+
+  // --- SIMULACAO ---
+  if (q.includes("se aumentar") || q.includes("se melhorar") || q.includes("se redistribuir") || q.includes("simulacao") || q.includes("simular") || q.includes("e se") || q.includes("o que acontece") || q.includes("impacto")) {
+    const wonBase = 465;
+    const ticketBase = 53478;
+    const receitaBase = wonBase * ticketBase;
+    const mkt = funnelByChannel.find(c => c.canal === "MKT")!;
+    const mktConvRate = mkt.won / mkt.leads;
+
+    return `🧪 **Simulacoes de Cenarios**\n**Base:** ${wonBase} deals/mes × ${formatCurrency(ticketBase)} = ${formatCurrency(receitaBase)}/mes\n\n**Cenario 1: Aumentar leads em 20%**\n• Leads adicionais: +${formatNumber(Math.round(mkt.leads * 0.2 / 12))}/mes\n• Won adicionais: +${Math.round(mkt.leads * 0.2 / 12 * mktConvRate)} deals/mes (mantendo conversao ${(mktConvRate * 100).toFixed(2)}%)\n• Receita adicional: +${formatCurrency(Math.round(mkt.leads * 0.2 / 12 * mktConvRate * ticketBase))}/mes\n• **Confianca:** ALTA (relacao linear leads→won comprovada)\n\n**Cenario 2: Melhorar conversao MQL→SQL de 21,7% para 30%**\n• SQLs adicionais: +${formatNumber(Math.round(mkt.mql / 12 * 0.083))}/mes\n• Won adicionais: +${Math.round(mkt.mql / 12 * 0.083 * 0.345 * 0.146)} deals/mes\n• Receita: +${formatCurrency(Math.round(mkt.mql / 12 * 0.083 * 0.345 * 0.146 * ticketBase))}/mes\n• **Confianca:** MEDIA (depende de qualificacao)\n\n**Cenario 3: Reduzir no-show MIA de 60% para 20%**\n• Reunioes efetivas adicionais: +${Math.round(miaData.reunioesAgendadas * 0.4 / 3)}/mes\n• Won adicionais: +${Math.round(miaData.reunioesAgendadas * 0.4 / 3 * 0.15)} deals/mes\n• Receita: +${formatCurrency(Math.round(miaData.reunioesAgendadas * 0.4 / 3 * 0.15 * ticketBase))}/mes\n• **Confianca:** MEDIA (depende da implementacao)\n\n**Cenario 4: Redistribuir budget de empreendimentos criticos**\n• Realocar R$ 45.600 (Morro das Pedras) + R$ 55.266 (Vistas Anita) = R$ 100.866\n• Para Marista 144 (CPW R$ 104): +${Math.round(100866 / 104)} vendas adicionais\n• **Confianca:** ALTA (CPW comprovado)\n\n**Premissas:** Conversao historica mantida. Sazonalidade nao modelada (dados insuficientes).`;
   }
 
   // --- CANAL / FUNIL ---
@@ -140,7 +172,7 @@ function generateResponse(input: string): string {
   }
 
   // --- DEFAULT ---
-  return `Ola! Sou a **Belle**, analista senior de vendas e marketing da Seazone.\n\nPosso responder com profundidade sobre:\n\n📊 **Dados** - "De onde vem esse dado?", "Como e calculado?"\n📅 **Periodo** - "Isso e historico ou 2026?"\n👤 **Responsaveis** - "Quem cuida desse empreendimento?"\n⚠️ **Gargalos** - "Qual o maior problema?", "O que fazer?"\n⚡ **Squads** - "Como esta o Squad 1?"\n💰 **Vendas** - "Como estao as vendas em 2026?"\n📣 **Campanhas** - "Qual campanha performa melhor?"\n🏗️ **Empreendimentos** - "Como esta o Marista 144?"\n🤖 **MIA** - "A MIA esta funcionando?"\n🔮 **Previsoes** - "Qual a projecao?"\n❌ **Perdas** - "Por que perdemos deals?"\n🏢 **Setores** - "Como esta o SZI?"\n\nPara cada resposta, informo: **origem, calculo, periodo e responsavel**.`;
+  return `Ola! Sou a **Belle**, analista senior preditiva da Seazone.\n\nPosso responder com profundidade sobre:\n\n📊 **Dados** - "De onde vem esse dado?"\n📅 **Periodo** - "Isso e historico ou 2026?"\n👤 **Responsaveis** - "Quem cuida do Marista 144?"\n⚠️ **Gargalos** - "Qual o maior problema?"\n⚡ **Squads** - "Como esta o Squad 1?"\n💰 **Vendas** - "Como estao as vendas?"\n📣 **Campanhas** - "Qual campanha performa melhor?"\n🏗️ **Empreendimentos** - "Como esta o Natal Spot?"\n🤖 **MIA** - "A MIA esta funcionando?"\n\n🔮 **PREDITIVO (novo!):**\n• "Qual a previsao de vendas?" → cenarios otimista/realista/pessimista\n• "Vamos bater a meta?" → probabilidade + ritmo necessario\n• "Se aumentar leads em 20%?" → simulacao com impacto\n• "Se melhorar conversao?" → calculo de receita adicional\n\nPara cada resposta: **origem, calculo, periodo, confianca e acao**.`;
 }
 
 export default function BelleChat() {
