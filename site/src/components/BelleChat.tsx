@@ -10,6 +10,60 @@ interface Message {
 function generateResponse(input: string): string {
   const q = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+  // =====================================================
+  // DETECÇÃO DE INTENÇÃO FUTURA — DEVE SER O PRIMEIRO CHECK
+  // Se a pergunta tem intenção de futuro, NUNCA retornar dados passados
+  // =====================================================
+  const isFuture = q.includes("proximo") || q.includes("próximo") || q.includes("agosto") || q.includes("julho") || q.includes("previsao") || q.includes("previsão") || q.includes("forecast") || q.includes("projecao") || q.includes("projeção") || q.includes("tendencia") || q.includes("tendência") || q.includes("se continuarmos") || q.includes("continuar assim") || q.includes("mantendo esse ritmo") || q.includes("do jeito que esta") || q.includes("se nada mudar") || q.includes("quanto vamos") || q.includes("quantos teremos") || q.includes("quantas teremos") || q.includes("devemos ter") || q.includes("devemos fechar") || q.includes("devemos vender") || q.includes("futuro") || q.includes("vamos bater") || q.includes("vai dar") || q.includes("expectativa");
+
+  if (isFuture) {
+    // Determinar QUAL métrica o usuário quer prever
+    const isLeads = q.includes("lead");
+    const isOpp = q.includes("oportunidade") || q.includes("opp");
+    const isLost = q.includes("perda") || q.includes("lost") || q.includes("perder");
+    const isReceita = q.includes("receita") || q.includes("faturamento") || q.includes("faturar");
+    const isMeta = q.includes("meta") || q.includes("bater") || q.includes("atingir") || q.includes("ritmo");
+
+    if (isLeads) {
+      const p = projetar(seriesTemporais.leadsRD);
+      const tendLabel = p.tendencia > 0.02 ? "CRESCIMENTO" : p.tendencia < -0.02 ? "QUEDA" : "ESTÁVEL";
+      return `📈 **Devemos ter entre ${formatNumber(Math.round(p.pessimista / 3))} e ${formatNumber(Math.round(p.otimista / 3))} leads no próximo mês.**\n\n**Tendência:** ${tendLabel} (${(p.tendencia * 100).toFixed(1)}%/mês)\n**Últimos 3 meses:** ${seriesTemporais.leadsRD.slice(-3).map(m => `${m.mes}: ${formatNumber(m.valor)}`).join(" → ")}\n\n**🟢 Otimista:** ~${formatNumber(Math.round(p.otimista / 3))}/mês\n**🟡 Realista:** ~${formatNumber(Math.round(p.realista / 3))}/mês\n**🔴 Pessimista:** ~${formatNumber(Math.round(p.pessimista / 3))}/mês\n\n**Confiança:** MÉDIA (9 meses de dados)\n**Método:** Projeção exponencial sobre conversões RD Station`;
+    }
+
+    if (isOpp) {
+      const pL = projetar(seriesTemporais.leadsRD);
+      const conv = 0.0619;
+      return `🎯 **Devemos gerar entre ${Math.round(pL.pessimista / 3 * conv)} e ${Math.round(pL.otimista / 3 * conv)} oportunidades no próximo mês.**\n\n**Cálculo:** Leads projetados × taxa Lead→OPP (${(conv * 100).toFixed(2)}%)\n\n**🟢 Otimista:** ~${Math.round(pL.otimista / 3 * conv)}/mês\n**🟡 Realista:** ~${Math.round(pL.realista / 3 * conv)}/mês\n**🔴 Pessimista:** ~${Math.round(pL.pessimista / 3 * conv)}/mês\n\n**Confiança:** MÉDIA\n**Como aumentar:** Melhorar MQL→SQL (21,7% → 30%) = +38% oportunidades`;
+    }
+
+    if (isLost) {
+      const p = projetar(seriesTemporais.lost);
+      return `❌ **Devemos ter entre ${formatNumber(Math.round(p.pessimista / 3))} e ${formatNumber(Math.round(p.otimista / 3))} perdas no próximo mês.**\n\n**Tendência:** ${p.tendencia > 0.02 ? "AUMENTO" : p.tendencia < -0.02 ? "REDUÇÃO" : "ESTÁVEL"} (${(p.tendencia * 100).toFixed(1)}%/mês)\n**Últimos 3 meses:** ${seriesTemporais.lost.slice(-3).map(m => `${m.mes}: ${formatNumber(m.valor)}`).join(" → ")}\n\n**🟢 Otimista (menos perdas):** ~${formatNumber(Math.round(p.pessimista / 3))}/mês\n**🟡 Realista:** ~${formatNumber(Math.round(p.realista / 3))}/mês\n**🔴 Pessimista (mais perdas):** ~${formatNumber(Math.round(p.otimista / 3))}/mês\n\n**Confiança:** MÉDIA\n**Principal causa:** 37% por "Não atende" — cadência multi-canal pode reduzir 15%`;
+    }
+
+    if (isReceita) {
+      const p = projetar(seriesTemporais.receita);
+      return `💰 **Devemos faturar entre ${formatCurrency(Math.round(p.pessimista / 3))} e ${formatCurrency(Math.round(p.otimista / 3))} no próximo mês.**\n\n**Tendência:** ${p.tendencia > 0.02 ? "CRESCIMENTO" : p.tendencia < -0.02 ? "QUEDA" : "ESTÁVEL"} (${(p.tendencia * 100).toFixed(1)}%/mês)\n**Últimos 3 meses:** ${seriesTemporais.receita.slice(-3).map(m => `${m.mes}: ${formatCurrency(m.valor)}`).join(" → ")}\n\n**🟢 Otimista:** ~${formatCurrency(Math.round(p.otimista / 3))}/mês\n**🟡 Realista:** ~${formatCurrency(Math.round(p.realista / 3))}/mês\n**🔴 Pessimista:** ~${formatCurrency(Math.round(p.pessimista / 3))}/mês\n\n**Confiança:** MÉDIA\n**Risco:** Ticket médio em queda (R$ 87K → R$ 53K)`;
+    }
+
+    if (isMeta) {
+      const wonMeses = [563, 420, 412];
+      const wonQ1 = wonMeses.reduce((s, v) => s + v, 0);
+      const media = Math.round(wonQ1 / 3);
+      const metaAnual = 6000;
+      const falta = metaAnual - wonQ1;
+      const ritmo = Math.round(falta / 9);
+      const prob = media >= ritmo ? "ALTA" : media >= ritmo * 0.85 ? "MÉDIA" : "BAIXA";
+      return `🎯 **Se continuarmos no ritmo atual (${media} deals/mês), ${media >= ritmo ? "vamos bater a meta" : `ficaremos abaixo da meta em ~${formatNumber(falta - media * 9)} deals`}.**\n\n**Meta anual:** ${formatNumber(metaAnual)} deals\n**Realizado Q1:** ${formatNumber(wonQ1)} (${((wonQ1 / metaAnual) * 100).toFixed(1)}%)\n**Ritmo necessário:** ${ritmo}/mês | **Ritmo atual:** ${media}/mês\n**Probabilidade:** ${prob}\n\n${media < ritmo ? `**Para bater a meta:**\n• Aumentar ${ritmo - media} deals/mês\n• Melhorar win rate de 2,7% para ${((ritmo / (4131 / 9)) * 100).toFixed(1)}%\n• Ou gerar +${formatNumber(Math.round((ritmo - media) / 0.027))} leads/mês` : "**Ação:** Manter ritmo atual e monitorar win rate."}\n\n**Confiança:** ${prob}\n**Método:** Q1/2026 extrapolado (${wonMeses.join(" → ")} deals)`;
+    }
+
+    // Won / vendas genérico futuro
+    const p = projetar(seriesTemporais.won);
+    const pR = projetar(seriesTemporais.receita);
+    const ticketMedio = Math.round(seriesTemporais.receita.slice(-3).reduce((s, m) => s + m.valor, 0) / seriesTemporais.won.slice(-3).reduce((s, m) => s + m.valor, 0));
+    return `🔮 **Devemos fechar entre ${Math.round(p.pessimista / 3)} e ${Math.round(p.otimista / 3)} deals no próximo mês, com receita estimada entre ${formatCurrency(Math.round(pR.pessimista / 3))} e ${formatCurrency(Math.round(pR.otimista / 3))}.**\n\n**Tendência:** ${p.tendencia < -0.05 ? "QUEDA" : p.tendencia > 0.05 ? "CRESCIMENTO" : "ESTÁVEL"} (${(p.tendencia * 100).toFixed(1)}%/mês)\n**Últimos 3 meses:** ${seriesTemporais.won.slice(-3).map(m => `${m.mes}: ${m.valor}`).join(" → ")} deals\n**Ticket médio:** ${formatCurrency(ticketMedio)}\n\n**🟢 Otimista:** ~${Math.round(p.otimista / 3)} deals/mês (${formatCurrency(Math.round(pR.otimista / 3))})\n**🟡 Realista:** ~${Math.round(p.realista / 3)} deals/mês (${formatCurrency(Math.round(pR.realista / 3))})\n**🔴 Pessimista:** ~${Math.round(p.pessimista / 3)} deals/mês (${formatCurrency(Math.round(pR.pessimista / 3))})\n\n**Pipeline:** ${formatNumber(4131)} deals abertos × ${(6.4)}% win rate = ~${Math.round(4131 * 0.064)} esperados\n**Confiança:** MÉDIA\n**Método:** Regressão exponencial sobre 9 meses (Jul/25-Mar/26)\n\n**Para melhorar:**\n• Otimizar MIA (no-show 60%→20%): +83 deals/trimestre\n• Escalar Parceiros: conversão 6,8x maior\n• Realocar R$ 100K de empreendimentos críticos: +970 deals`;
+  }
+
   // --- DEFINICOES (com calculo e origem) ---
   for (const [key, val] of Object.entries(belleKnowledge.definitions)) {
     if (q.includes(key.toLowerCase())) {
