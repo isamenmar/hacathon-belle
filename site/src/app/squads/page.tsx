@@ -46,8 +46,8 @@ export default function SquadsPage() {
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         <KpiCard label="Squads Ativos" value={String(squads.length)} subtitle="Estrutura atual" highlight />
         <KpiCard label="Membros" value={String(totalMembros)} subtitle="Ativos em 2026" />
-        <KpiCard label="Leads Totais" value={formatNumber(totalLeads)} subtitle="Acumulado historico" />
-        <KpiCard label="Won Total" value={formatNumber(totalWon)} subtitle="Acumulado historico" trend="up" trendValue={`${((totalWon / totalLeads) * 100).toFixed(2)}%`} />
+        <KpiCard label="Leads Totais" value={formatNumber(totalLeads)} subtitle="Acumulado histórico" />
+        <KpiCard label="Won Total" value={formatNumber(totalWon)} subtitle="Acumulado histórico" trend="up" trendValue={`${((totalWon / totalLeads) * 100).toFixed(2)}%`} />
         <KpiCard label="Alertas" value={String(totalAlertas)} subtitle="Ativos agora" trend={totalAlertas > 5 ? "down" : "up"} trendValue={totalAlertas > 5 ? "Atenção" : "OK"} />
       </div>
 
@@ -64,7 +64,7 @@ export default function SquadsPage() {
               <span className={`text-xs font-medium px-2 py-0.5 rounded ${
                 sq.status === "saudavel" ? "bg-green-100 text-green-700" :
                 sq.status === "atencao" ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"
-              }`}>{sq.ocupacao}% ocupacao</span>
+              }`}>{sq.ocupacao}% ocupação</span>
               <span className={`text-xs font-medium px-2 py-0.5 rounded ${
                 sq.scoreLabel === "bom" ? "bg-green-100 text-green-700" :
                 sq.scoreLabel === "medio" ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"
@@ -194,14 +194,14 @@ export default function SquadsPage() {
       <h2 className="text-lg font-bold text-[#0F1B2D] pt-2">Comparacao entre Squads</h2>
 
       <div className="grid lg:grid-cols-2 gap-4">
-        <ChartWrapper title="Conversao Lead→Won (%)" subtitle="Por squad">
+        <ChartWrapper title="Conversão Lead→Won (%)" subtitle="Por squad">
           <ResponsiveContainer>
             <BarChart data={compData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis dataKey="nome" tick={{ fill: "#6b7280", fontSize: 11 }} />
               <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} />
               <Tooltip contentStyle={ts} />
-              <Bar dataKey="convRate" fill="#F06B5D" radius={[4, 4, 0, 0]} name="Conversao (%)" />
+              <Bar dataKey="convRate" fill="#F06B5D" radius={[4, 4, 0, 0]} name="Conversão (%)" />
             </BarChart>
           </ResponsiveContainer>
         </ChartWrapper>
@@ -236,7 +236,7 @@ export default function SquadsPage() {
           </ResponsiveContainer>
         </ChartWrapper>
 
-        <ChartWrapper title="Ocupacao por Squad (%)" subtitle="Capacidade utilizada">
+        <ChartWrapper title="Ocupação por Squad (%)" subtitle="Capacidade utilizada">
           <ResponsiveContainer>
             <PieChart>
               <Pie data={compData.map(c => ({ nome: c.nome, value: c.ocupacao }))} dataKey="value" nameKey="nome" cx="50%" cy="50%" outerRadius={90} label={({ name, value }) => `${name}: ${value}%`}>
@@ -288,7 +288,7 @@ export default function SquadsPage() {
 
         {/* Previsão */}
         <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-          <h3 className="text-sm font-semibold text-[#0F1B2D] mb-3">🔮 Previsao por Squad</h3>
+          <h3 className="text-sm font-semibold text-[#0F1B2D] mb-3">🔮 Previsão por Squad</h3>
           {squads.map(sq => (
             <div key={sq.id} className="py-2 border-b border-gray-100 last:border-0">
               <div className="flex justify-between items-center">
@@ -296,13 +296,13 @@ export default function SquadsPage() {
                 <span className="text-xs font-bold text-[#F06B5D]">{sq.previsaoWon} won</span>
               </div>
               <p className="text-[10px] text-gray-500 mt-0.5">
-                +10% sobre historico ({sq.metricas.won} atual) | {sq.membros.length} membros
+                +10% sobre histórico ({sq.metricas.won} atual) | {sq.membros.length} membros
               </p>
             </div>
           ))}
           <div className="mt-3 p-2 bg-[#FFF5F3] rounded-lg">
             <p className="text-[10px] text-gray-600">
-              <strong className="text-[#F06B5D]">Total previsto:</strong> {squads.reduce((s, sq) => s + sq.previsaoWon, 0)} deals won (proximo periodo)
+              <strong className="text-[#F06B5D]">Total previsto:</strong> {squads.reduce((s, sq) => s + sq.previsaoWon, 0)} deals won (próximo período)
             </p>
           </div>
         </div>

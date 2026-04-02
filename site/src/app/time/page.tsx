@@ -90,7 +90,7 @@ export default function TimePage() {
                 <th className="text-right py-2 px-3">Total</th>
                 <th className="text-right py-2 px-3">Calls</th>
                 <th className="text-right py-2 px-3">WhatsApp</th>
-                <th className="text-right py-2 px-3">Msgs</th>
+                <th className="text-right py-2 px-3">Mensagens</th>
                 <th className="text-right py-2 px-3">Reuniões</th>
                 <th className="text-right py-2 px-3">Contratos</th>
                 <th className="text-right py-2 px-3">No-Shows</th>

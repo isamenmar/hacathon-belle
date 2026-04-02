@@ -27,8 +27,8 @@ export default function MarketingPage() {
         <KpiCard label="Investimento Total (FB)" value={formatCurrency(totalSpend)} subtitle="2026 (Jan-Mar)" highlight />
         <KpiCard label="Impressões" value={`${(totalImpressions / 1e6).toFixed(1)}M`} subtitle="2026 (Jan-Mar)" />
         <KpiCard label="Cliques" value={formatNumber(totalClicks)} subtitle="2026 (Jan-Mar)" />
-        <KpiCard label="CPL (MKT)" value={`R$ ${metricasComerciais.cpl}`} subtitle="Historico canal MKT" trend="neutral" trendValue="Canal MKT" />
-        <KpiCard label="CPW (MKT)" value={`R$ ${metricasComerciais.cpw}`} subtitle="Historico canal MKT" trend="neutral" trendValue="Custo por venda" />
+        <KpiCard label="CPL (MKT)" value={`R$ ${metricasComerciais.cpl}`} subtitle="Histórico canal MKT" trend="neutral" trendValue="Canal MKT" />
+        <KpiCard label="CPW (MKT)" value={`R$ ${metricasComerciais.cpw}`} subtitle="Histórico canal MKT" trend="neutral" trendValue="Custo por venda" />
       </div>
 
       <div className="bg-[#FFF5F3] border border-[#F06B5D]/20 rounded-xl p-4">

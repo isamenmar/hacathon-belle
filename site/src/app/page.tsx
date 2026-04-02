@@ -35,10 +35,10 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <KpiCard label="Deals Won" value={formatNumber(pipelineOverview.won.deals)} subtitle="Historico (Jul/2019 - Mar/2026)" highlight />
-        <KpiCard label="Valor Total Won" value={formatCurrency(pipelineOverview.won.valor)} subtitle="Historico | R$ 1,09 Bilhao" highlight />
-        <KpiCard label="Win Rate" value={`${pipelineOverview.winRate}%`} subtitle="Historico geral" trend="down" trendValue="2,7% em Mar/26" />
-        <KpiCard label="Ticket Médio" value={formatCurrency(pipelineOverview.won.ticketMedio)} subtitle="Historico geral" trend="down" trendValue="queda vs 2024" />
+        <KpiCard label="Deals Won" value={formatNumber(pipelineOverview.won.deals)} subtitle="Histórico (Jul/2019 - Mar/2026)" highlight />
+        <KpiCard label="Valor Total Won" value={formatCurrency(pipelineOverview.won.valor)} subtitle="Histórico | R$ 1,09 Bilhao" highlight />
+        <KpiCard label="Win Rate" value={`${pipelineOverview.winRate}%`} subtitle="Histórico geral" trend="down" trendValue="2,7% em Mar/26" />
+        <KpiCard label="Ticket Médio" value={formatCurrency(pipelineOverview.won.ticketMedio)} subtitle="Histórico geral" trend="down" trendValue="queda vs 2024" />
         <KpiCard label="Leads Abertos" value={formatNumber(leadsAbertos.reduce((s, l) => s + l.leads, 0))} subtitle="Snapshot atual" />
       </div>
 

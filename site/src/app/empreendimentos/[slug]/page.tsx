@@ -84,7 +84,7 @@ export default function EmpreendimentoPage() {
       {!hasFullFunnel && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3">
           <p className="text-xs text-yellow-700">
-            <strong>Aviso:</strong> Este empreendimento nao possui funil historico completo. Exibindo dados disponiveis de 2026 (RD Station, Facebook Ads, Squads).
+            <strong>Aviso:</strong> Este empreendimento nao possui funil histórico completo. Exibindo dados disponiveis de 2026 (RD Station, Facebook Ads, Squads).
           </p>
         </div>
       )}
@@ -133,7 +133,7 @@ export default function EmpreendimentoPage() {
             </ResponsiveContainer>
           </ChartWrapper>
 
-          <ChartWrapper title="Taxas de Conversao" subtitle="Por etapa do funil">
+          <ChartWrapper title="Taxas de Conversão" subtitle="Por etapa do funil">
             <ResponsiveContainer>
               <BarChart data={conversionRates}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -203,7 +203,7 @@ export default function EmpreendimentoPage() {
       {/* Squad info */}
       {squadInfo && (
         <div className="bg-[#FFF5F3] border border-[#F06B5D]/20 rounded-xl p-5">
-          <h3 className="text-xs text-[#F06B5D] uppercase tracking-wider font-semibold mb-2">Squad Responsavel</h3>
+          <h3 className="text-xs text-[#F06B5D] uppercase tracking-wider font-semibold mb-2">Squad Responsável</h3>
           <p className="text-sm font-bold text-[#0F1B2D]">{squadInfo.nome}</p>
           <p className="text-xs text-gray-500 mt-1">
             Membros: {squadInfo.membros.map(m => m.nome).join(", ")}
