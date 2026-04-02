@@ -1,3 +1,22 @@
+// ============ SEAZONE COLORS ============
+export const COLORS = {
+  coral: "#F06B5D",
+  coralLight: "#f8a49b",
+  navy: "#0F1B2D",
+  navyLight: "#1a2d47",
+  white: "#ffffff",
+  grayBg: "#f8f9fa",
+  grayBorder: "#e5e7eb",
+  grayText: "#6b7280",
+  green: "#22c55e",
+  red: "#ef4444",
+  yellow: "#eab308",
+  blue: "#3b82f6",
+  indigo: "#6366f1",
+};
+
+export const CHART_COLORS = ["#F06B5D", "#0F1B2D", "#3b82f6", "#22c55e", "#eab308", "#8b5cf6", "#f97316", "#ec4899"];
+
 // ============ FUNNEL DATA BY CHANNEL ============
 export const funnelByChannel = [
   { canal: "MKT", leads: 39427, mql: 24440, sql: 5307, opp: 1831, won: 268, investimento: 255691 },
@@ -7,37 +26,25 @@ export const funnelByChannel = [
 
 // ============ FUNNEL DATA BY EMPREENDIMENTO ============
 export const funnelByEmpreendimento = [
-  { nome: "Marista 144 Spot", leads: 13180, mql: 6934, sql: 1993, opp: 572, won: 219, investimento: 22750, cpw: 103.88 },
-  { nome: "Urubici Spot II", leads: 11866, mql: 8965, sql: 1854, opp: 812, won: 104, investimento: 31850, cpw: 306.25 },
-  { nome: "Vistas de Anitá 2", leads: 6906, mql: 5227, sql: 558, opp: 214, won: 15, investimento: 55266, cpw: 3684.40 },
-  { nome: "Santinho Spot", leads: 3876, mql: 1933, sql: 846, opp: 285, won: 75, investimento: 0, cpw: 0 },
-  { nome: "Batel Spot", leads: 3061, mql: 2405, sql: 256, opp: 111, won: 30, investimento: 36300, cpw: 1210 },
-  { nome: "Meireles Spot", leads: 2103, mql: 1080, sql: 233, opp: 79, won: 39, investimento: 0, cpw: 0 },
-  { nome: "Bonito Spot", leads: 1789, mql: 1237, sql: 396, opp: 149, won: 38, investimento: 0, cpw: 0 },
-  { nome: "Vale do Ouro", leads: 1564, mql: 1251, sql: 379, opp: 244, won: 24, investimento: 25294, cpw: 1053.92 },
-  { nome: "Morro das Pedras Spot", leads: 822, mql: 780, sql: 80, opp: 37, won: 4, investimento: 45600, cpw: 11400 },
-  { nome: "Santo Antônio Spot", leads: 692, mql: 485, sql: 63, opp: 25, won: 11, investimento: 0, cpw: 0 },
-  { nome: "Imbassaí Spot", leads: 445, mql: 356, sql: 147, opp: 111, won: 11, investimento: 15175, cpw: 1379.55 },
-  { nome: "Salvador Spot", leads: 406, mql: 325, sql: 162, opp: 130, won: 13, investimento: 12015, cpw: 923.46 },
-  { nome: "Caraguá Spot", leads: 323, mql: 203, sql: 98, opp: 84, won: 23, investimento: 0, cpw: 0 },
-  { nome: "Jurerê Spot II", leads: 309, mql: 167, sql: 78, opp: 29, won: 10, investimento: 0, cpw: 0 },
-  { nome: "Trancoso Spot", leads: 188, mql: 150, sql: 75, opp: 60, won: 6, investimento: 11441, cpw: 1906.83 },
+  { nome: "Marista 144 Spot", slug: "marista-144-spot", leads: 13180, mql: 6934, sql: 1993, opp: 572, won: 219, investimento: 22750, cpw: 103.88, setor: "SZI" },
+  { nome: "Urubici Spot II", slug: "urubici-spot-ii", leads: 11866, mql: 8965, sql: 1854, opp: 812, won: 104, investimento: 31850, cpw: 306.25, setor: "SZI" },
+  { nome: "Vistas de Anitá 2", slug: "vistas-de-anita-2", leads: 6906, mql: 5227, sql: 558, opp: 214, won: 15, investimento: 55266, cpw: 3684.40, setor: "SZI" },
+  { nome: "Santinho Spot", slug: "santinho-spot", leads: 3876, mql: 1933, sql: 846, opp: 285, won: 75, investimento: 0, cpw: 0, setor: "SZS" },
+  { nome: "Batel Spot", slug: "batel-spot", leads: 3061, mql: 2405, sql: 256, opp: 111, won: 30, investimento: 36300, cpw: 1210, setor: "SZI" },
+  { nome: "Meireles Spot", slug: "meireles-spot", leads: 2103, mql: 1080, sql: 233, opp: 79, won: 39, investimento: 0, cpw: 0, setor: "SZS" },
+  { nome: "Bonito Spot", slug: "bonito-spot", leads: 1789, mql: 1237, sql: 396, opp: 149, won: 38, investimento: 0, cpw: 0, setor: "SZS" },
+  { nome: "Vale do Ouro", slug: "vale-do-ouro", leads: 1564, mql: 1251, sql: 379, opp: 244, won: 24, investimento: 25294, cpw: 1053.92, setor: "SZI" },
+  { nome: "Morro das Pedras Spot", slug: "morro-das-pedras-spot", leads: 822, mql: 780, sql: 80, opp: 37, won: 4, investimento: 45600, cpw: 11400, setor: "SZI" },
+  { nome: "Santo Antônio Spot", slug: "santo-antonio-spot", leads: 692, mql: 485, sql: 63, opp: 25, won: 11, investimento: 0, cpw: 0, setor: "SZS" },
+  { nome: "Imbassaí Spot", slug: "imbassai-spot", leads: 445, mql: 356, sql: 147, opp: 111, won: 11, investimento: 15175, cpw: 1379.55, setor: "SZI" },
+  { nome: "Salvador Spot", slug: "salvador-spot", leads: 406, mql: 325, sql: 162, opp: 130, won: 13, investimento: 12015, cpw: 923.46, setor: "SZI" },
+  { nome: "Caraguá Spot", slug: "caragua-spot", leads: 323, mql: 203, sql: 98, opp: 84, won: 23, investimento: 0, cpw: 0, setor: "SZI" },
+  { nome: "Jurerê Spot II", slug: "jurere-spot-ii", leads: 309, mql: 167, sql: 78, opp: 29, won: 10, investimento: 0, cpw: 0, setor: "SZI" },
+  { nome: "Trancoso Spot", slug: "trancoso-spot", leads: 188, mql: 150, sql: 75, opp: 60, won: 6, investimento: 11441, cpw: 1906.83, setor: "SZI" },
 ];
 
-// ============ DEALS WON BY MONTH ============
+// ============ DEALS WON BY MONTH (2025-2026 focus) ============
 export const dealsWonByMonth = [
-  { mes: "Jan/24", won: 161, valor: 11256068, ticket: 69913 },
-  { mes: "Fev/24", won: 123, valor: 8319798, ticket: 67641 },
-  { mes: "Mar/24", won: 194, valor: 21223304, ticket: 109398 },
-  { mes: "Abr/24", won: 280, valor: 46782910, ticket: 167082 },
-  { mes: "Mai/24", won: 151, valor: 12377682, ticket: 81971 },
-  { mes: "Jun/24", won: 274, valor: 35639715, ticket: 130072 },
-  { mes: "Jul/24", won: 347, valor: 54756799, ticket: 157801 },
-  { mes: "Ago/24", won: 341, valor: 50532146, ticket: 148188 },
-  { mes: "Set/24", won: 239, valor: 25424548, ticket: 106379 },
-  { mes: "Out/24", won: 258, valor: 27141579, ticket: 105200 },
-  { mes: "Nov/24", won: 270, valor: 28696167, ticket: 106282 },
-  { mes: "Dez/24", won: 250, valor: 30457231, ticket: 121829 },
   { mes: "Jan/25", won: 275, valor: 26382710, ticket: 95937 },
   { mes: "Fev/25", won: 394, valor: 60578765, ticket: 153753 },
   { mes: "Mar/25", won: 210, valor: 18622725, ticket: 88680 },
@@ -69,100 +76,98 @@ export const lostReasons = [
   { motivo: "Contato Inválido", total: 2951, pct: 1.7 },
 ];
 
-// ============ TOP SELLERS ============
-export const topSellers = [
-  { nome: "Filipe Padoveze", dealsWon: 856, valorTotal: 777794, ticketMedio: 909, atividades: 38005, calls: 5615, whatsapp: 12314, reunioes: 115, contratos: 3 },
-  { nome: "Pedro Eckert", dealsWon: 827, valorTotal: 0, ticketMedio: 0, atividades: 36326, calls: 8402, whatsapp: 13818, reunioes: 383, contratos: 0 },
-  { nome: "Thyago Sampaio", dealsWon: 698, valorTotal: 36993710, ticketMedio: 53000, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Gabriela Branco", dealsWon: 584, valorTotal: 11554670, ticketMedio: 19785, atividades: 15984, calls: 475, whatsapp: 5360, reunioes: 2582, contratos: 28 },
-  { nome: "Leonardo Grosbelli", dealsWon: 511, valorTotal: 38897725, ticketMedio: 76121, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Eduardo Albani", dealsWon: 448, valorTotal: 18676849, ticketMedio: 41689, atividades: 14762, calls: 1957, whatsapp: 5026, reunioes: 4761, contratos: 0 },
-  { nome: "Giovanna Zanchetta", dealsWon: 352, valorTotal: 4350227, ticketMedio: 12359, atividades: 13085, calls: 3775, whatsapp: 3976, reunioes: 1703, contratos: 0 },
-  { nome: "Pamella Brayner", dealsWon: 339, valorTotal: 86110197, ticketMedio: 254012, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Luana Schaikoski", dealsWon: 327, valorTotal: 91013961, ticketMedio: 278330, atividades: 23173, calls: 159, whatsapp: 14833, reunioes: 1314, contratos: 120 },
-  { nome: "Giovanna Naomi", dealsWon: 280, valorTotal: 11993993, ticketMedio: 42836, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Izadora Parckert", dealsWon: 240, valorTotal: 24058377, ticketMedio: 100243, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Alexandre Maia", dealsWon: 215, valorTotal: 61687185, ticketMedio: 286917, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Luísa Torres", dealsWon: 215, valorTotal: 9988803, ticketMedio: 46460, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Willian Miranda", dealsWon: 211, valorTotal: 28205607, ticketMedio: 133676, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Carol Rosário", dealsWon: 205, valorTotal: 8449070, ticketMedio: 41215, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
-  { nome: "Debora Brodt", dealsWon: 163, valorTotal: 47788590, ticketMedio: 293182, atividades: 0, calls: 0, whatsapp: 0, reunioes: 0, contratos: 0 },
+// ============ TOP SELLERS 2026 ============
+export const topSellers2026 = [
+  { nome: "Gabriel Zonatto", dealsWon: 147, valorTotal: 0, ticketMedio: 0 },
+  { nome: "Pedro Eckert", dealsWon: 141, valorTotal: 0, ticketMedio: 0 },
+  { nome: "Giovanna Zanchetta", dealsWon: 105, valorTotal: 1321462, ticketMedio: 12585 },
+  { nome: "Gabriela Branco", dealsWon: 99, valorTotal: 131881, ticketMedio: 1332 },
+  { nome: "Gabriela Lemos", dealsWon: 81, valorTotal: 0, ticketMedio: 0 },
+  { nome: "Eduardo Albani", dealsWon: 79, valorTotal: 2968388, ticketMedio: 37575 },
+  { nome: "Carol Rosário", dealsWon: 77, valorTotal: 4383579, ticketMedio: 56930 },
+  { nome: "Automação", dealsWon: 74, valorTotal: 0, ticketMedio: 0 },
+  { nome: "Filipe Padoveze", dealsWon: 72, valorTotal: 777794, ticketMedio: 10803 },
+  { nome: "Maria Vitória Amaral", dealsWon: 69, valorTotal: 50000, ticketMedio: 725 },
+  { nome: "Fabio Cristiano", dealsWon: 43, valorTotal: 13573063, ticketMedio: 315653 },
+  { nome: "Amanda Peixoto", dealsWon: 27, valorTotal: 6393469, ticketMedio: 236795 },
+  { nome: "Luana Schaikoski", dealsWon: 25, valorTotal: 8011168, ticketMedio: 320447 },
+  { nome: "Priscila Pestana", dealsWon: 18, valorTotal: 5421254, ticketMedio: 301181 },
 ];
 
-// ============ TEAM ACTIVITY PERFORMERS (2025+) ============
-export const teamPerformers = [
-  { nome: "Filipe Padoveze", total: 38005, calls: 5615, whatsapp: 12314, mensagens: 865, reunioes: 115, contratos: 3, noShows: 35 },
-  { nome: "Pedro Eckert", total: 36326, calls: 8402, whatsapp: 13818, mensagens: 94, reunioes: 383, contratos: 0, noShows: 109 },
-  { nome: "Morada - Mia (IA)", total: 33933, calls: 5088, whatsapp: 5155, mensagens: 2508, reunioes: 4605, contratos: 1, noShows: 2127 },
-  { nome: "Hellen Dias", total: 31427, calls: 15007, whatsapp: 3090, mensagens: 6957, reunioes: 164, contratos: 0, noShows: 156 },
-  { nome: "Natália Saramago", total: 31041, calls: 13217, whatsapp: 2151, mensagens: 8820, reunioes: 1887, contratos: 0, noShows: 225 },
+// ============ TEAM ACTIVITY 2026 ============
+export const teamPerformers2026 = [
   { nome: "Automação", total: 26315, calls: 2393, whatsapp: 20944, mensagens: 2506, reunioes: 2, contratos: 0, noShows: 2 },
-  { nome: "Joyce", total: 25125, calls: 10628, whatsapp: 7641, mensagens: 4693, reunioes: 1447, contratos: 0, noShows: 190 },
-  { nome: "Luana Schaikoski", total: 23173, calls: 159, whatsapp: 14833, mensagens: 2351, reunioes: 1314, contratos: 120, noShows: 331 },
-  { nome: "Raynara Lopes", total: 23151, calls: 10681, whatsapp: 6771, mensagens: 4887, reunioes: 688, contratos: 0, noShows: 99 },
-  { nome: "Luciana Patrício", total: 21782, calls: 12765, whatsapp: 1621, mensagens: 4412, reunioes: 1526, contratos: 0, noShows: 291 },
-  { nome: "Maria Thalya", total: 19249, calls: 1469, whatsapp: 8751, mensagens: 3726, reunioes: 615, contratos: 1, noShows: 144 },
-  { nome: "Raquel", total: 17452, calls: 8153, whatsapp: 5249, mensagens: 3382, reunioes: 416, contratos: 0, noShows: 166 },
-  { nome: "Gabriela Branco", total: 15984, calls: 475, whatsapp: 5360, mensagens: 3129, reunioes: 2582, contratos: 28, noShows: 22 },
-  { nome: "Eduardo Albani", total: 14762, calls: 1957, whatsapp: 5026, mensagens: 2078, reunioes: 4761, contratos: 0, noShows: 11 },
-  { nome: "Kamille Gomes", total: 13204, calls: 4267, whatsapp: 3640, mensagens: 4928, reunioes: 177, contratos: 0, noShows: 178 },
+  { nome: "Morada - Mia (IA)", total: 16581, calls: 2113, whatsapp: 2614, mensagens: 1707, reunioes: 2565, contratos: 0, noShows: 1538 },
+  { nome: "Hellen Dias", total: 14946, calls: 7141, whatsapp: 123, mensagens: 2196, reunioes: 33, contratos: 0, noShows: 93 },
+  { nome: "Natália Saramago", total: 14168, calls: 6438, whatsapp: 103, mensagens: 2492, reunioes: 1493, contratos: 0, noShows: 128 },
+  { nome: "Karoane Izabela", total: 11121, calls: 7495, whatsapp: 184, mensagens: 3103, reunioes: 2, contratos: 0, noShows: 61 },
+  { nome: "Karoline Borges", total: 8636, calls: 5786, whatsapp: 96, mensagens: 2441, reunioes: 100, contratos: 0, noShows: 36 },
+  { nome: "Luciana Patrício", total: 8130, calls: 5610, whatsapp: 10, mensagens: 1096, reunioes: 127, contratos: 0, noShows: 193 },
+  { nome: "Gabriel Zonatto", total: 7273, calls: 857, whatsapp: 5463, mensagens: 871, reunioes: 10, contratos: 0, noShows: 4 },
+  { nome: "Joyce", total: 5804, calls: 2216, whatsapp: 294, mensagens: 2221, reunioes: 476, contratos: 0, noShows: 108 },
+  { nome: "Larissa Marques", total: 5758, calls: 1071, whatsapp: 327, mensagens: 2599, reunioes: 1, contratos: 0, noShows: 141 },
+  { nome: "Raquel", total: 4651, calls: 2493, whatsapp: 147, mensagens: 1869, reunioes: 11, contratos: 0, noShows: 123 },
+  { nome: "Rubia Lorena", total: 4541, calls: 1801, whatsapp: 596, mensagens: 1836, reunioes: 132, contratos: 0, noShows: 6 },
+  { nome: "Raynara Lopes", total: 4200, calls: 1274, whatsapp: 713, mensagens: 2126, reunioes: 42, contratos: 0, noShows: 37 },
+  { nome: "Gabriela Lemos", total: 4037, calls: 462, whatsapp: 1551, mensagens: 498, reunioes: 448, contratos: 0, noShows: 18 },
+  { nome: "Giovanna Zanchetta", total: 3420, calls: 1106, whatsapp: 1327, mensagens: 436, reunioes: 327, contratos: 0, noShows: 6 },
+  { nome: "Rodrigo Paixão", total: 3407, calls: 1297, whatsapp: 1289, mensagens: 632, reunioes: 44, contratos: 26, noShows: 23 },
 ];
 
-// ============ MIA (IA) DATA ============
+// ============ MIA DATA 2026 ============
 export const miaData = {
-  totalAtividades: 33933,
-  ranking: 3,
-  calls: 5088,
-  whatsapp: 5155,
-  mensagens: 2508,
-  reunioesAgendadas: 4605,
-  noShows: 2127,
-  taxaNoShow: 46.2,
-  contratos: 1,
-  mediaHumanaReuniao: 588,
-  mediaHumanaNoShow: 8.3,
+  totalAtividades: 16581,
+  ranking: 2,
+  calls: 2113,
+  whatsapp: 2614,
+  mensagens: 1707,
+  reunioesAgendadas: 2565,
+  noShows: 1538,
+  taxaNoShow: 60.0,
+  contratos: 0,
+  reunioesEfetivas: 1027,
 };
 
-// ============ FACEBOOK ADS CAMPAIGNS ============
-export const facebookCampaigns = [
-  { nome: "Vistas de Anitá (Brasil)", gasto: 208086, impressoes: 6125406, cliques: 81690, cpc: 3.56, ctr: 2.10 },
-  { nome: "Barra Grande Spot (BA/MG)", gasto: 205321, impressoes: 5442978, cliques: 55550, cpc: 4.14, ctr: 1.59 },
-  { nome: "Marista 144 (GO/DF/MT)", gasto: 187188, impressoes: 6410484, cliques: 53563, cpc: 4.47, ctr: 1.61 },
-  { nome: "Ponta das Canas II (RS/SC/PR)", gasto: 129154, impressoes: 3718390, cliques: 53489, cpc: 2.91, ctr: 2.06 },
-  { nome: "Natal Spot (RN/CE/PB)", gasto: 127527, impressoes: 6026646, cliques: 40543, cpc: 3.77, ctr: 1.45 },
-  { nome: "Canas Beach (RS/SC/PR)", gasto: 122993, impressoes: 4268025, cliques: 46446, cpc: 3.71, ctr: 2.26 },
-  { nome: "Marista 144 Spot (Set/24)", gasto: 110634, impressoes: 3307708, cliques: 33157, cpc: 3.94, ctr: 1.96 },
-  { nome: "Batel Spot (Brasil)", gasto: 109907, impressoes: 2947905, cliques: 31866, cpc: 3.53, ctr: 2.28 },
-  { nome: "Jurerê Spot III (RS/SC/PR)", gasto: 89259, impressoes: 3339325, cliques: 23611, cpc: 4.26, ctr: 0.76 },
-  { nome: "Caraguá Spot (RS/SC/PR/SP)", gasto: 84951, impressoes: 3934389, cliques: 68750, cpc: 1.73, ctr: 3.21 },
+// ============ FACEBOOK ADS 2026 (SZI) ============
+export const facebookCampaigns2026 = [
+  { nome: "Barra Grande Spot (BA/MG)", gasto: 100395, impressoes: 2875621, cliques: 26069, cpc: 4.50, ctr: 1.04, setor: "SZI", regiao: "BA/MG" },
+  { nome: "Natal Spot (RN/CE/PB)", gasto: 89816, impressoes: 4559596, cliques: 30236, cpc: 3.50, ctr: 0.89, setor: "SZI", regiao: "RN/CE/PB" },
+  { nome: "Jurerê Spot III (RS/SC/PR)", gasto: 73421, impressoes: 2756766, cliques: 19733, cpc: 4.14, ctr: 0.78, setor: "SZI", regiao: "RS/SC/PR" },
+  { nome: "Barra Grande Spot II (BA/MG)", gasto: 58454, impressoes: 1453473, cliques: 14047, cpc: 5.04, ctr: 1.00, setor: "SZI", regiao: "BA/MG" },
+  { nome: "Ponta das Canas II (RS/SC/PR)", gasto: 58217, impressoes: 3004363, cliques: 34305, cpc: 2.23, ctr: 1.94, setor: "SZI", regiao: "RS/SC/PR" },
+  { nome: "Natal Spot II (RN/CE/PB)", gasto: 56284, impressoes: 1469169, cliques: 13651, cpc: 4.44, ctr: 0.97, setor: "SZI", regiao: "RN/CE/PB" },
+  { nome: "Ponta das Canas (RS/SC/PR)", gasto: 55413, impressoes: 1922679, cliques: 32807, cpc: 1.86, ctr: 1.91, setor: "SZI", regiao: "RS/SC/PR" },
+  { nome: "Jurerê Spot II (RS/SC/PR)", gasto: 44636, impressoes: 1059138, cliques: 13431, cpc: 3.63, ctr: 1.42, setor: "SZI", regiao: "RS/SC/PR" },
+  { nome: "Jurerê Spot II v2 (RS/SC/PR)", gasto: 37849, impressoes: 870927, cliques: 8654, cpc: 5.01, ctr: 1.05, setor: "SZI", regiao: "RS/SC/PR" },
+  { nome: "Novo Campeche II (RS/SC/PR)", gasto: 28567, impressoes: 618897, cliques: 5820, cpc: 5.50, ctr: 1.11, setor: "SZI", regiao: "RS/SC/PR" },
+  { nome: "Vistas de Anitá (RS/SC/PR)", gasto: 22813, impressoes: 754155, cliques: 11342, cpc: 2.73, ctr: 1.45, setor: "SZI", regiao: "RS/SC/PR" },
+  { nome: "Bonito Spot II (MS/MT/PR/GO)", gasto: 4197, impressoes: 116977, cliques: 1137, cpc: 3.49, ctr: 1.18, setor: "SZI", regiao: "MS/MT/PR/GO" },
 ];
 
-// ============ RD STATION CONVERSIONS BY MONTH ============
+// ============ RD STATION 2026 ============
+export const rdTop2026 = [
+  { nome: "Ponta das Canas Spot II", conversoes: 5001, contatos: 4766 },
+  { nome: "Natal Spot", conversoes: 4821, contatos: 4604 },
+  { nome: "Barra Grande Spot", conversoes: 4422, contatos: 4252 },
+  { nome: "Jurerê Spot III", conversoes: 2399, contatos: 2380 },
+  { nome: "Jurerê Spot II", conversoes: 1925, contatos: 1823 },
+  { nome: "Foz Spot", conversoes: 1508, contatos: 1451 },
+  { nome: "Vistas de Anitá II", conversoes: 1359, contatos: 1331 },
+  { nome: "Rosa Sul Spot", conversoes: 1306, contatos: 1248 },
+  { nome: "Cachoeira Beach Spot", conversoes: 1245, contatos: 1213 },
+  { nome: "Meireles Spot", conversoes: 1065, contatos: 1020 },
+  { nome: "Ilha do Campeche II", conversoes: 918, contatos: 910 },
+  { nome: "Caraguá Spot", conversoes: 79, contatos: 68 },
+];
+
 export const rdConversionsByMonth = [
-  { mes: "Jan/24", conversoes: 6911, contatos: 3056 },
-  { mes: "Abr/24", conversoes: 5476, contatos: 2423 },
-  { mes: "Jul/24", conversoes: 6438, contatos: 2679 },
-  { mes: "Out/24", conversoes: 5505, contatos: 3518 },
   { mes: "Jan/25", conversoes: 10309, contatos: 6030 },
   { mes: "Abr/25", conversoes: 11200, contatos: 6046 },
   { mes: "Jul/25", conversoes: 9801, contatos: 6416 },
   { mes: "Out/25", conversoes: 19683, contatos: 14636 },
   { mes: "Jan/26", conversoes: 18461, contatos: 14952 },
+  { mes: "Fev/26", conversoes: 15738, contatos: 12515 },
   { mes: "Mar/26", conversoes: 11669, contatos: 9063 },
-];
-
-// ============ RD STATION TOP EMPREENDIMENTOS ============
-export const rdTopEmpreendimentos = [
-  { nome: "Barra Grande Spot", conversoes: 9008, contatos: 8435 },
-  { nome: "Marista 144 Spot", conversoes: 8560, contatos: 7758 },
-  { nome: "Vistas de Anitá II", conversoes: 8152, contatos: 7788 },
-  { nome: "Ponta das Canas Spot II", conversoes: 7528, contatos: 7083 },
-  { nome: "Caraguá Spot", conversoes: 7337, contatos: 6669 },
-  { nome: "Natal Spot", conversoes: 6080, contatos: 5798 },
-  { nome: "Meireles Spot", conversoes: 5340, contatos: 4880 },
-  { nome: "Jurerê Spot II", conversoes: 4628, contatos: 4154 },
-  { nome: "Foz Spot", conversoes: 4502, contatos: 4340 },
-  { nome: "Rosa Sul Spot", conversoes: 4148, contatos: 3910 },
 ];
 
 // ============ PIPELINE OVERVIEW ============
@@ -183,15 +188,10 @@ export const leadsAbertos = [
   { setor: "Expansão", leads: 149 },
 ];
 
-// ============ METRICAS COMERCIAIS MKT ============
-export const metricasComerciais = {
-  cpl: 6.49,
-  cmql: 10.46,
-  copp: 139.65,
-  cpw: 954.07,
-};
+// ============ METRICAS COMERCIAIS ============
+export const metricasComerciais = { cpl: 6.49, cmql: 10.46, copp: 139.65, cpw: 954.07 };
 
-// ============ WIN/LOST BY MONTH (consolidated) ============
+// ============ WIN/LOST BY MONTH ============
 export const winLostByMonth = [
   { mes: "Jan/25", won: 56, lost: 463 },
   { mes: "Fev/25", won: 388, lost: 7854 },
@@ -210,16 +210,55 @@ export const winLostByMonth = [
   { mes: "Mar/26", won: 415, lost: 15058 },
 ];
 
-// ============ SETORES ============
+// ============ SETORES (with 2026 metrics) ============
 export const setores = [
-  { slug: "szs", nome: "SZS (Seazone Services)", pipeline: 14, leadsAbertos: 559, wonTotal: 5886, valorTotal: 230932354 },
-  { slug: "szi", nome: "SZI (Seazone Investimentos)", pipeline: 28, leadsAbertos: 684, wonTotal: 2986, valorTotal: 743506470 },
-  { slug: "parceiros", nome: "Parceiros", pipeline: 7, leadsAbertos: 515, wonTotal: 2394, valorTotal: 0 },
-  { slug: "marketplace", nome: "Marketplace", pipeline: 44, leadsAbertos: 451, wonTotal: 424, valorTotal: 26403341 },
-  { slug: "expansao", nome: "Expansão", pipeline: 13, leadsAbertos: 149, wonTotal: 175, valorTotal: 1955000 },
+  { slug: "szs", nome: "SZS (Seazone Services)", pipeline: 14, leadsAbertos: 559, wonTotal: 455, valorTotal: 578515, lostTotal: 6820, cpl: 0, cmql: 0, csql: 0, copp: 0 },
+  { slug: "szi", nome: "SZI (Seazone Investimentos)", pipeline: 28, leadsAbertos: 684, wonTotal: 169, valorTotal: 53526714, lostTotal: 13885, cpl: 5.42, cmql: 8.73, csql: 38.21, copp: 112.50 },
+  { slug: "parceiros", nome: "Parceiros", pipeline: 7, leadsAbertos: 515, wonTotal: 494, valorTotal: 0, lostTotal: 7162, cpl: 0, cmql: 0, csql: 0, copp: 0 },
+  { slug: "marketplace", nome: "Marketplace", pipeline: 44, leadsAbertos: 451, wonTotal: 134, valorTotal: 8678904, lostTotal: 1390, cpl: 0, cmql: 0, csql: 0, copp: 0 },
+  { slug: "expansao", nome: "Expansão", pipeline: 13, leadsAbertos: 149, wonTotal: 11, valorTotal: 170000, lostTotal: 547, cpl: 0, cmql: 0, csql: 0, copp: 0 },
 ];
 
-// Helper
+// ============ BELLE ASSISTANT KNOWLEDGE BASE ============
+export const belleKnowledge = {
+  definitions: {
+    CPL: "Custo por Lead - Total investido dividido pelo número de leads gerados",
+    MQL: "Marketing Qualified Lead - Lead qualificado pelo marketing com fit mínimo",
+    SQL: "Sales Qualified Lead - Lead qualificado pela pré-venda para abordagem comercial",
+    OPP: "Oportunidade - Lead que chegou à etapa de reunião/negociação",
+    CPW: "Custo por Won - Total investido dividido pelo número de vendas fechadas",
+    CMQL: "Custo por MQL - Total investido dividido pelo número de MQLs",
+    COPP: "Custo por Oportunidade - Total investido dividido pelo número de oportunidades",
+    CSQL: "Custo por SQL - Total investido dividido pelo número de SQLs",
+    CPC: "Custo por Clique - Valor pago por cada clique em anúncios",
+    CTR: "Click-Through Rate - Taxa de cliques sobre impressões (%)",
+    "Win Rate": "Taxa de conversão de deals para won (ganhos)",
+    "No-Show": "Lead que agendou reunião mas não compareceu",
+    "Ticket Médio": "Valor médio por deal fechado (won)",
+  },
+  dataSources: {
+    "Pipedrive": "CRM principal - deals, pipeline, atividades, stages",
+    "RD Station": "Automação de marketing - conversões, formulários, UTMs",
+    "Meetime": "Plataforma de pré-venda - ligações, cadências, prospections",
+    "Facebook Ads": "Campanhas Meta - impressões, cliques, gasto, leads",
+    "Google Ads": "Campanhas de busca paga",
+    "NEKT": "Data warehouse (Amazon Athena) que consolida todas as fontes",
+    "Pipefy": "Processos operacionais e fluxos de trabalho",
+  },
+  insights: [
+    "37% dos deals são perdidos por 'Não atende/Não responde' - principal gargalo",
+    "Canal Parceiros converte 6,8x mais que Marketing (4,6% vs 0,68%)",
+    "MIA (IA) agenda 4,4x mais reuniões que humanos mas tem 60% de no-show em 2026",
+    "Win rate caindo: 10,8% (Jan/25) → 2,7% (Mar/26)",
+    "Marista 144 Spot tem o melhor CPW: R$ 103,88",
+    "Morro das Pedras Spot tem CPW crítico: R$ 11.400",
+    "Facebook Ads gera 65%+ das conversões no RD Station",
+    "Ticket médio caiu de R$ 167K (2024) para R$ 52K (2026) - mais volume, menor valor",
+    "Luana Schaikoski lidera em valor por deal: R$ 320K ticket médio em 2026",
+  ],
+};
+
+// ============ HELPERS ============
 export function formatCurrency(value: number): string {
   if (value >= 1e9) return `R$ ${(value / 1e9).toFixed(2)}B`;
   if (value >= 1e6) return `R$ ${(value / 1e6).toFixed(1)}M`;

@@ -2,60 +2,67 @@
 import { useParams } from "next/navigation";
 import KpiCard from "@/components/KpiCard";
 import ChartWrapper from "@/components/ChartWrapper";
-import { setores, funnelByEmpreendimento, leadsAbertos, formatCurrency, formatNumber, winLostByMonth } from "@/data";
+import { setores, funnelByEmpreendimento, formatCurrency, formatNumber, winLostByMonth, CHART_COLORS } from "@/data";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area, Legend
 } from "recharts";
+
+const tooltipStyle = { background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8 };
 
 export default function SetorPage() {
   const { slug } = useParams<{ slug: string }>();
   const setor = setores.find(s => s.slug === slug);
 
   if (!setor) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500">Setor não encontrado</p>
-      </div>
-    );
+    return <div className="flex items-center justify-center h-full"><p className="text-gray-400">Setor não encontrado</p></div>;
   }
 
-  const la = leadsAbertos.find(l => l.setor === (
-    slug === "szi" ? "SZI" : slug === "szs" ? "SZS" : slug === "parceiros" ? "Parceiros" : slug === "marketplace" ? "Marketplace" : "Expansão"
-  ));
+  const empreendimentos = funnelByEmpreendimento.filter(e => {
+    if (slug === "szi") return e.setor === "SZI";
+    if (slug === "szs") return e.setor === "SZS";
+    return false;
+  });
 
-  const empreendimentos = slug === "szi"
-    ? funnelByEmpreendimento.filter(e => ["Marista 144 Spot", "Urubici Spot II", "Vistas de Anitá 2", "Batel Spot", "Vale do Ouro", "Morro das Pedras Spot", "Imbassaí Spot", "Salvador Spot", "Trancoso Spot", "Caraguá Spot", "Jurerê Spot II"].includes(e.nome))
-    : slug === "szs"
-    ? funnelByEmpreendimento.filter(e => ["Santinho Spot", "Meireles Spot", "Bonito Spot", "Santo Antônio Spot"].includes(e.nome))
-    : funnelByEmpreendimento.slice(0, 5);
-
-  const winRate = setor.wonTotal > 0 ? ((setor.wonTotal / (setor.wonTotal + 10000)) * 100).toFixed(1) : "N/A";
+  const winRate = setor.wonTotal > 0 ? ((setor.wonTotal / (setor.wonTotal + setor.lostTotal)) * 100).toFixed(1) : "0";
 
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs text-indigo-400 uppercase tracking-wider">Setor</p>
-        <h1 className="text-2xl font-bold">{setor.nome}</h1>
-        <p className="text-sm text-gray-500 mt-1">Pipeline #{setor.pipeline} | Dados até Mar/2026</p>
+        <p className="text-xs text-[#F06B5D] uppercase tracking-wider font-semibold">Setor</p>
+        <h1 className="text-2xl font-bold text-[#0F1B2D]">{setor.nome}</h1>
+        <p className="text-sm text-gray-500 mt-1">Pipeline #{setor.pipeline} | Dados 2026</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard label="Deals Won" value={formatNumber(setor.wonTotal)} highlight />
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        <KpiCard label="Won 2026" value={formatNumber(setor.wonTotal)} highlight />
+        <KpiCard label="Lost 2026" value={formatNumber(setor.lostTotal)} trend="down" trendValue={`${winRate}% win rate`} />
         <KpiCard label="Valor Total" value={setor.valorTotal > 0 ? formatCurrency(setor.valorTotal) : "N/A"} />
-        <KpiCard label="Leads Abertos" value={la ? formatNumber(la.leads) : "N/A"} subtitle="Snapshot atual" />
-        <KpiCard label="Pipeline ID" value={`#${setor.pipeline}`} />
+        <KpiCard label="Leads Abertos" value={formatNumber(setor.leadsAbertos)} subtitle="Snapshot atual" />
+        <KpiCard label="Pipeline" value={`#${setor.pipeline}`} />
       </div>
+
+      {setor.cpl > 0 && (
+        <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+          <h3 className="text-sm font-semibold text-[#0F1B2D] mb-4">Métricas de Custo (2026)</h3>
+          <div className="grid grid-cols-4 gap-4">
+            <div><p className="text-xs text-gray-500">CPL</p><p className="text-xl font-bold text-[#F06B5D]">R$ {setor.cpl.toFixed(2)}</p></div>
+            <div><p className="text-xs text-gray-500">CMQL</p><p className="text-xl font-bold text-blue-600">R$ {setor.cmql.toFixed(2)}</p></div>
+            <div><p className="text-xs text-gray-500">CSQL</p><p className="text-xl font-bold text-yellow-600">R$ {setor.csql.toFixed(2)}</p></div>
+            <div><p className="text-xs text-gray-500">COPP</p><p className="text-xl font-bold text-green-600">R$ {setor.copp.toFixed(2)}</p></div>
+          </div>
+        </div>
+      )}
 
       <div className="grid lg:grid-cols-2 gap-4">
         <ChartWrapper title="Won vs Lost (Mensal)" subtitle="2025-2026">
           <ResponsiveContainer>
             <AreaChart data={winLostByMonth}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-              <XAxis dataKey="mes" tick={{ fill: "#9ca3af", fontSize: 10 }} />
-              <YAxis tick={{ fill: "#9ca3af", fontSize: 10 }} />
-              <Tooltip contentStyle={{ background: "#111827", border: "1px solid #374151", borderRadius: 8 }} />
-              <Area type="monotone" dataKey="won" fill="#22c55e33" stroke="#22c55e" name="Won" />
-              <Area type="monotone" dataKey="lost" fill="#ef444433" stroke="#ef4444" name="Lost" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="mes" tick={{ fill: "#6b7280", fontSize: 10 }} />
+              <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Area type="monotone" dataKey="won" fill="#bbf7d0" stroke="#22c55e" name="Won" />
+              <Area type="monotone" dataKey="lost" fill="#fecaca" stroke="#ef4444" name="Lost" />
               <Legend />
             </AreaChart>
           </ResponsiveContainer>
@@ -65,11 +72,11 @@ export default function SetorPage() {
           <ChartWrapper title="Empreendimentos (Deals Won)" subtitle={setor.nome}>
             <ResponsiveContainer>
               <BarChart data={empreendimentos.sort((a, b) => b.won - a.won)} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-                <XAxis type="number" tick={{ fill: "#9ca3af", fontSize: 10 }} />
-                <YAxis dataKey="nome" type="category" tick={{ fill: "#9ca3af", fontSize: 9 }} width={130} />
-                <Tooltip contentStyle={{ background: "#111827", border: "1px solid #374151", borderRadius: 8 }} />
-                <Bar dataKey="won" fill="#6366f1" radius={[0, 4, 4, 0]} name="Won" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis type="number" tick={{ fill: "#6b7280", fontSize: 10 }} />
+                <YAxis dataKey="nome" type="category" tick={{ fill: "#6b7280", fontSize: 9 }} width={130} />
+                <Tooltip contentStyle={tooltipStyle} />
+                <Bar dataKey="won" fill="#F06B5D" radius={[0, 4, 4, 0]} name="Won" />
               </BarChart>
             </ResponsiveContainer>
           </ChartWrapper>
@@ -77,12 +84,12 @@ export default function SetorPage() {
       </div>
 
       {empreendimentos.length > 0 && (
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <h3 className="text-sm font-semibold text-gray-300 mb-3">Funil por Empreendimento</h3>
+        <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+          <h3 className="text-sm font-semibold text-[#0F1B2D] mb-3">Funil por Empreendimento</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
-                <tr className="text-gray-500 border-b border-gray-800">
+                <tr className="text-gray-500 border-b border-gray-200">
                   <th className="text-left py-2 px-3">Empreendimento</th>
                   <th className="text-right py-2 px-3">Leads</th>
                   <th className="text-right py-2 px-3">MQL</th>
@@ -95,17 +102,17 @@ export default function SetorPage() {
               </thead>
               <tbody>
                 {empreendimentos.sort((a, b) => b.won - a.won).map((e) => (
-                  <tr key={e.nome} className="border-b border-gray-800/50 hover:bg-gray-800/30">
-                    <td className="py-2 px-3 text-gray-300 font-medium">{e.nome}</td>
-                    <td className="text-right py-2 px-3 text-gray-400">{formatNumber(e.leads)}</td>
-                    <td className="text-right py-2 px-3 text-gray-400">{formatNumber(e.mql)}</td>
-                    <td className="text-right py-2 px-3 text-gray-400">{formatNumber(e.sql)}</td>
-                    <td className="text-right py-2 px-3 text-gray-400">{formatNumber(e.opp)}</td>
-                    <td className="text-right py-2 px-3 text-green-400 font-medium">{e.won}</td>
-                    <td className={`text-right py-2 px-3 font-medium ${e.cpw > 3000 ? "text-red-400" : e.cpw > 1000 ? "text-yellow-400" : e.cpw > 0 ? "text-green-400" : "text-gray-600"}`}>
+                  <tr key={e.nome} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-2 px-3 text-[#0F1B2D] font-medium">{e.nome}</td>
+                    <td className="text-right py-2 px-3 text-gray-600">{formatNumber(e.leads)}</td>
+                    <td className="text-right py-2 px-3 text-gray-600">{formatNumber(e.mql)}</td>
+                    <td className="text-right py-2 px-3 text-gray-600">{formatNumber(e.sql)}</td>
+                    <td className="text-right py-2 px-3 text-gray-600">{formatNumber(e.opp)}</td>
+                    <td className="text-right py-2 px-3 text-green-600 font-medium">{e.won}</td>
+                    <td className={`text-right py-2 px-3 font-medium ${e.cpw > 3000 ? "text-red-600" : e.cpw > 1000 ? "text-yellow-600" : e.cpw > 0 ? "text-green-600" : "text-gray-400"}`}>
                       {e.cpw > 0 ? `R$ ${formatNumber(e.cpw)}` : "-"}
                     </td>
-                    <td className="text-right py-2 px-3 text-indigo-400">{((e.won / e.leads) * 100).toFixed(2)}%</td>
+                    <td className="text-right py-2 px-3 text-[#F06B5D] font-medium">{((e.won / e.leads) * 100).toFixed(2)}%</td>
                   </tr>
                 ))}
               </tbody>

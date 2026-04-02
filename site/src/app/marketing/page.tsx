@@ -2,17 +2,17 @@
 import KpiCard from "@/components/KpiCard";
 import ChartWrapper from "@/components/ChartWrapper";
 import {
-  facebookCampaigns, rdConversionsByMonth, rdTopEmpreendimentos,
-  metricasComerciais, funnelByChannel, formatCurrency, formatNumber
+  facebookCampaigns2026, rdConversionsByMonth, rdTop2026,
+  metricasComerciais, funnelByChannel, formatCurrency, formatNumber, CHART_COLORS
 } from "@/data";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   CartesianGrid, LineChart, Line, Legend
 } from "recharts";
 
-const totalSpend = facebookCampaigns.reduce((s, c) => s + c.gasto, 0);
-const totalClicks = facebookCampaigns.reduce((s, c) => s + c.cliques, 0);
-const totalImpressions = facebookCampaigns.reduce((s, c) => s + c.impressoes, 0);
+const totalSpend = facebookCampaigns2026.reduce((s, c) => s + c.gasto, 0);
+const totalClicks = facebookCampaigns2026.reduce((s, c) => s + c.cliques, 0);
+const totalImpressions = facebookCampaigns2026.reduce((s, c) => s + c.impressoes, 0);
 const mkt = funnelByChannel.find(c => c.canal === "MKT")!;
 
 export default function MarketingPage() {
@@ -31,13 +31,13 @@ export default function MarketingPage() {
         <KpiCard label="CPW (MKT)" value={`R$ ${metricasComerciais.cpw}`} trend="neutral" trendValue="Custo por venda" />
       </div>
 
-      <div className="bg-indigo-950/30 border border-indigo-900/50 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-indigo-400 mb-2">💡 Insights de Marketing</h3>
-        <ul className="text-xs text-indigo-300/80 space-y-1">
-          <li>• Facebook Ads gera 65%+ de todas as conversões no RD Station (146.922 conversões)</li>
-          <li>• Campanhas CBO regionais (RS/SC/PR) têm CTR superior (2,06-2,26%) vs nacionais (1,0-1,6%)</li>
-          <li>• Caraguá Spot tem melhor CPC (R$ 1,73) e maior CTR (3,21%)</li>
-          <li>• Volume de conversões cresceu 173% de 2024 para 2026</li>
+      <div className="bg-[#FFF5F3] border border-[#F06B5D]/20 rounded-xl p-4">
+        <h3 className="text-sm font-semibold text-[#F06B5D] mb-2">Insights de Marketing</h3>
+        <ul className="text-xs text-gray-600 space-y-1">
+          <li>Facebook Ads gera 65%+ de todas as conversões no RD Station (146.922 conversões)</li>
+          <li>Campanhas CBO regionais (RS/SC/PR) têm CTR superior (2,06-2,26%) vs nacionais (1,0-1,6%)</li>
+          <li>Caraguá Spot tem melhor CPC (R$ 1,73) e maior CTR (3,21%)</li>
+          <li>Volume de conversões cresceu 173% de 2024 para 2026</li>
         </ul>
       </div>
 
@@ -45,11 +45,11 @@ export default function MarketingPage() {
         <ChartWrapper title="Conversões RD Station por Trimestre" subtitle="2024-2026">
           <ResponsiveContainer>
             <LineChart data={rdConversionsByMonth}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-              <XAxis dataKey="mes" tick={{ fill: "#9ca3af", fontSize: 10 }} />
-              <YAxis tick={{ fill: "#9ca3af", fontSize: 10 }} />
-              <Tooltip contentStyle={{ background: "#111827", border: "1px solid #374151", borderRadius: 8 }} />
-              <Line type="monotone" dataKey="conversoes" stroke="#6366f1" strokeWidth={2} name="Conversões" dot={{ fill: "#6366f1" }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="mes" tick={{ fill: "#6b7280", fontSize: 10 }} />
+              <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} />
+              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8 }} />
+              <Line type="monotone" dataKey="conversoes" stroke="#F06B5D" strokeWidth={2} name="Conversões" dot={{ fill: "#F06B5D" }} />
               <Line type="monotone" dataKey="contatos" stroke="#22c55e" strokeWidth={2} name="Contatos Únicos" dot={{ fill: "#22c55e" }} />
               <Legend />
             </LineChart>
@@ -58,23 +58,23 @@ export default function MarketingPage() {
 
         <ChartWrapper title="Top Empreendimentos por Conversões (RD Station)" subtitle="Total histórico">
           <ResponsiveContainer>
-            <BarChart data={rdTopEmpreendimentos.slice(0, 8)} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
-              <XAxis type="number" tick={{ fill: "#9ca3af", fontSize: 10 }} />
-              <YAxis dataKey="nome" type="category" tick={{ fill: "#9ca3af", fontSize: 9 }} width={130} />
-              <Tooltip contentStyle={{ background: "#111827", border: "1px solid #374151", borderRadius: 8 }} />
-              <Bar dataKey="conversoes" fill="#6366f1" radius={[0, 4, 4, 0]} name="Conversões" />
+            <BarChart data={rdTop2026.slice(0, 8)} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis type="number" tick={{ fill: "#6b7280", fontSize: 10 }} />
+              <YAxis dataKey="nome" type="category" tick={{ fill: "#6b7280", fontSize: 9 }} width={130} />
+              <Tooltip contentStyle={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8 }} />
+              <Bar dataKey="conversoes" fill="#F06B5D" radius={[0, 4, 4, 0]} name="Conversões" />
             </BarChart>
           </ResponsiveContainer>
         </ChartWrapper>
       </div>
 
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-gray-300 mb-3">Campanhas Facebook Ads (SZI) - Top por Investimento</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-gray-900 mb-3">Campanhas Facebook Ads (SZI) - Top por Investimento</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="text-gray-500 border-b border-gray-800">
+              <tr className="text-gray-500 border-b border-gray-200">
                 <th className="text-left py-2 px-3">Campanha</th>
                 <th className="text-right py-2 px-3">Gasto (R$)</th>
                 <th className="text-right py-2 px-3">Impressões</th>
@@ -84,14 +84,14 @@ export default function MarketingPage() {
               </tr>
             </thead>
             <tbody>
-              {facebookCampaigns.map((c) => (
-                <tr key={c.nome} className="border-b border-gray-800/50 hover:bg-gray-800/30">
-                  <td className="py-2 px-3 text-gray-300 max-w-[200px] truncate">{c.nome}</td>
-                  <td className="text-right py-2 px-3 text-gray-400">{formatCurrency(c.gasto)}</td>
-                  <td className="text-right py-2 px-3 text-gray-400">{(c.impressoes / 1e6).toFixed(1)}M</td>
-                  <td className="text-right py-2 px-3 text-gray-400">{formatNumber(c.cliques)}</td>
-                  <td className="text-right py-2 px-3 text-gray-400">R$ {c.cpc.toFixed(2)}</td>
-                  <td className={`text-right py-2 px-3 font-medium ${c.ctr >= 2 ? "text-green-400" : c.ctr >= 1.5 ? "text-yellow-400" : "text-red-400"}`}>
+              {facebookCampaigns2026.map((c) => (
+                <tr key={c.nome} className="border-b border-gray-100 hover:bg-gray-50">
+                  <td className="py-2 px-3 text-gray-700 max-w-[200px] truncate">{c.nome}</td>
+                  <td className="text-right py-2 px-3 text-gray-500">{formatCurrency(c.gasto)}</td>
+                  <td className="text-right py-2 px-3 text-gray-500">{(c.impressoes / 1e6).toFixed(1)}M</td>
+                  <td className="text-right py-2 px-3 text-gray-500">{formatNumber(c.cliques)}</td>
+                  <td className="text-right py-2 px-3 text-gray-500">R$ {c.cpc.toFixed(2)}</td>
+                  <td className={`text-right py-2 px-3 font-medium ${c.ctr >= 2 ? "text-green-600" : c.ctr >= 1.5 ? "text-yellow-600" : "text-red-500"}`}>
                     {c.ctr.toFixed(2)}%
                   </td>
                 </tr>
@@ -101,12 +101,12 @@ export default function MarketingPage() {
         </div>
       </div>
 
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-gray-300 mb-3">Funil MKT vs PARC</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-gray-900 mb-3">Funil MKT vs PARC</h3>
         <div className="grid grid-cols-2 gap-6">
           {funnelByChannel.filter(c => c.canal !== "Outros").map((ch) => (
             <div key={ch.canal}>
-              <h4 className="text-sm font-medium text-gray-400 mb-3">{ch.canal === "MKT" ? "Marketing" : "Parceiros"}</h4>
+              <h4 className="text-sm font-medium text-gray-500 mb-3">{ch.canal === "MKT" ? "Marketing" : "Parceiros"}</h4>
               <div className="space-y-2">
                 {[
                   { label: "Lead → MQL", value: ((ch.mql / ch.leads) * 100).toFixed(1) },
@@ -117,10 +117,10 @@ export default function MarketingPage() {
                   <div key={step.label}>
                     <div className="flex justify-between text-xs mb-1">
                       <span className="text-gray-500">{step.label}</span>
-                      <span className="text-gray-300">{step.value}%</span>
+                      <span className="text-gray-700">{step.value}%</span>
                     </div>
-                    <div className="h-1.5 bg-gray-800 rounded-full">
-                      <div className="h-1.5 bg-indigo-500 rounded-full" style={{ width: `${step.value}%` }} />
+                    <div className="h-1.5 bg-gray-200 rounded-full">
+                      <div className="h-1.5 bg-[#F06B5D] rounded-full" style={{ width: `${step.value}%` }} />
                     </div>
                   </div>
                 ))}
