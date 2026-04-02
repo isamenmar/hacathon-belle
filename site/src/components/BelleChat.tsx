@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { belleKnowledge, formatCurrency, formatNumber, pipelineOverview, metricasComerciais, miaData, funnelByChannel, setores, funnelByEmpreendimento, facebookCampaigns2026, lostReasons, squads, empHealthScores, vendas2026, topSellers2026, teamPerformers2026, allEmpreendimentos2026 } from "@/data";
+import { belleKnowledge, formatCurrency, formatNumber, pipelineOverview, metricasComerciais, miaData, funnelByChannel, setores, funnelByEmpreendimento, facebookCampaigns2026, lostReasons, squads, empHealthScores, vendas2026, topSellers2026, teamPerformers2026, allEmpreendimentos2026, seriesTemporais, projetar } from "@/data";
 
 interface Message {
   role: "user" | "belle";
@@ -120,8 +120,39 @@ function generateResponse(input: string): string {
     }).join("\n\n")}\n\n**Insight:** Canal Parceiros (Pipeline #7) converte 6,8x mais que MKT com custo zero.`;
   }
 
-  // --- PREVISÃO REAL COM TENDÊNCIA ---
-  if (q.includes("previsao") || q.includes("previsão") || q.includes("forecast") || q.includes("projecao") || q.includes("projeção") || q.includes("futuro") || q.includes("tendencia") || q.includes("tendência") || q.includes("quanto vamos vender") || q.includes("se continuarmos")) {
+  // --- PREVISÃO DE LEADS ---
+  if (q.includes("quantos leads") || q.includes("previsao de leads") || q.includes("previsão de leads") || q.includes("leads no proximo") || q.includes("leads no próximo") || q.includes("leads em agosto") || q.includes("geracao de leads") || q.includes("geração de leads")) {
+    const p = projetar(seriesTemporais.leadsRD);
+    const tendLabel = p.tendencia > 0.02 ? "CRESCIMENTO" : p.tendencia < -0.02 ? "QUEDA" : "ESTÁVEL";
+    return `📈 **Previsão de Leads — Próximo Trimestre (Abr-Jun/2026)**\n\n**Tendência identificada:** ${tendLabel} (${(p.tendencia * 100).toFixed(1)}% ao mês)\n**Últimos 3 meses:** ${seriesTemporais.leadsRD.slice(-3).map(m => `${m.mes}: ${formatNumber(m.valor)}`).join(" → ")}\n**Média recente:** ${formatNumber(p.media)}/mês\n\n**🟢 Cenário Otimista:** ~${formatNumber(p.otimista)} leads no trimestre (~${formatNumber(Math.round(p.otimista / 3))}/mês)\n**🟡 Cenário Realista:** ~${formatNumber(p.realista)} leads no trimestre (~${formatNumber(Math.round(p.realista / 3))}/mês)\n**🔴 Cenário Pessimista:** ~${formatNumber(p.pessimista)} leads no trimestre (~${formatNumber(Math.round(p.pessimista / 3))}/mês)\n\n**Confiança:** MÉDIA (9 meses de dados)\n**Base:** Conversões RD Station (rd_station_contact_events)\n**Método:** Projeção exponencial com tendência dos últimos 3 meses\n\n**Observação:** ${p.tendencia < -0.05 ? "Tendência de queda. Revisar campanhas e budget de Facebook Ads." : p.tendencia > 0.05 ? "Tendência de crescimento. Manter estratégia atual." : "Volume estável. Oportunidade de otimizar conversão."}`;
+  }
+
+  // --- PREVISÃO DE OPORTUNIDADES ---
+  if (q.includes("oportunidade") || q.includes("opps") || q.includes("quantas opp") || q.includes("opp no proximo") || q.includes("opp no próximo")) {
+    const convLeadOpp = 0.0619; // historico: 2941 opp / 47530 leads
+    const pLeads = projetar(seriesTemporais.leadsRD);
+    const oppOtimista = Math.round(pLeads.otimista * convLeadOpp);
+    const oppRealista = Math.round(pLeads.realista * convLeadOpp);
+    const oppPessimista = Math.round(pLeads.pessimista * convLeadOpp);
+    return `🎯 **Previsão de Oportunidades — Próximo Trimestre**\n\n**Taxa de conversão Lead→OPP:** ${(convLeadOpp * 100).toFixed(2)}% (histórico)\n**Baseado na projeção de leads:**\n\n**🟢 Otimista:** ~${formatNumber(oppOtimista)} oportunidades (~${Math.round(oppOtimista / 3)}/mês)\n**🟡 Realista:** ~${formatNumber(oppRealista)} oportunidades (~${Math.round(oppRealista / 3)}/mês)\n**🔴 Pessimista:** ~${formatNumber(oppPessimista)} oportunidades (~${Math.round(oppPessimista / 3)}/mês)\n\n**Confiança:** MÉDIA\n**Método:** Projeção de leads × taxa de conversão histórica Lead→OPP\n**Fonte:** dataset_szi (funil) + rd_station_contact_events (leads)\n\n**Como aumentar oportunidades:**\n• Melhorar MQL→SQL (hoje 21,7% → meta 30%) = +38% mais SQLs\n• Reduzir no-show da MIA (60% → 20%) = +552 reuniões efetivas/trimestre`;
+  }
+
+  // --- PREVISÃO DE PERDAS ---
+  if (q.includes("perda") && (q.includes("previsao") || q.includes("previsão") || q.includes("proximo") || q.includes("próximo") || q.includes("tendencia") || q.includes("tendência") || q.includes("aumentar") || q.includes("diminuir"))) {
+    const p = projetar(seriesTemporais.lost);
+    const tendLabel = p.tendencia > 0.02 ? "AUMENTO" : p.tendencia < -0.02 ? "REDUÇÃO" : "ESTÁVEL";
+    return `❌ **Previsão de Perdas — Próximo Trimestre**\n\n**Tendência:** ${tendLabel} (${(p.tendencia * 100).toFixed(1)}% ao mês)\n**Últimos 3 meses:** ${seriesTemporais.lost.slice(-3).map(m => `${m.mes}: ${formatNumber(m.valor)}`).join(" → ")}\n**Média recente:** ${formatNumber(p.media)} lost/mês\n\n**🟢 Cenário Otimista (menos perdas):** ~${formatNumber(p.pessimista)} lost no trimestre\n**🟡 Cenário Realista:** ~${formatNumber(p.realista)} lost no trimestre\n**🔴 Cenário Pessimista (mais perdas):** ~${formatNumber(p.otimista)} lost no trimestre\n\n**Confiança:** MÉDIA\n**Principal motivo de perda:** "Não atende/Não responde" (37%)\n\n**Como reduzir perdas:**\n• Cadência multi-canal (WhatsApp→Call→Email) = -15% estimado\n• Confirmação MIA 24h antes = reduzir no-show\n• Qualificação mais rigorosa = menos leads frios\n\n**Método:** Projeção exponencial sobre série lost (pipedrive_v2_consolidated_deal_flow)`;
+  }
+
+  // --- PREVISÃO DE RECEITA ---
+  if (q.includes("receita") && (q.includes("previsao") || q.includes("previsão") || q.includes("proximo") || q.includes("próximo") || q.includes("quanto") || q.includes("faturar") || q.includes("faturamento"))) {
+    const p = projetar(seriesTemporais.receita);
+    const tendLabel = p.tendencia > 0.02 ? "CRESCIMENTO" : p.tendencia < -0.02 ? "QUEDA" : "ESTÁVEL";
+    return `💰 **Previsão de Receita — Próximo Trimestre (Abr-Jun/2026)**\n\n**Tendência:** ${tendLabel} (${(p.tendencia * 100).toFixed(1)}% ao mês)\n**Últimos 3 meses:** ${seriesTemporais.receita.slice(-3).map(m => `${m.mes}: ${formatCurrency(m.valor)}`).join(" → ")}\n**Média recente:** ${formatCurrency(p.media)}/mês\n\n**🟢 Cenário Otimista:** ${formatCurrency(p.otimista)} no trimestre (~${formatCurrency(Math.round(p.otimista / 3))}/mês)\n**🟡 Cenário Realista:** ${formatCurrency(p.realista)} no trimestre (~${formatCurrency(Math.round(p.realista / 3))}/mês)\n**🔴 Cenário Pessimista:** ${formatCurrency(p.pessimista)} no trimestre (~${formatCurrency(Math.round(p.pessimista / 3))}/mês)\n\n**Confiança:** MÉDIA (9 meses de série)\n**Fonte:** pipedrive_v2_deals (valor × won_time)\n**Método:** Projeção exponencial com tendência dos últimos 3 meses\n\n**Fatores de risco:**\n• Ticket médio em queda (R$ 87K → R$ 53K)\n• Win rate caindo (impacta volume de won)\n• Pipeline de 4.131 deals abertos pode não repor`;
+  }
+
+  // --- PREVISÃO DE WON / VENDAS GENÉRICA ---
+  if (q.includes("previsao") || q.includes("previsão") || q.includes("forecast") || q.includes("projecao") || q.includes("projeção") || q.includes("futuro") || q.includes("tendencia") || q.includes("tendência") || q.includes("quanto vamos vender") || q.includes("se continuarmos") || q.includes("continuar assim") || q.includes("mantendo esse ritmo") || q.includes("do jeito que esta") || q.includes("se nada mudar")) {
     // Dados mensais REAIS para calcular tendência
     const meses = [
       { mes: "Jan/26", won: 563, valor: 29535529 },

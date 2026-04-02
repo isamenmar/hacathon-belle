@@ -194,6 +194,57 @@ export const pipelineOverview = {
   winRate: 6.4,
 };
 
+// ============ SÉRIES TEMPORAIS PARA PREVISÃO ============
+export const seriesTemporais = {
+  // Conversões RD Station (leads gerados) - mensal
+  leadsRD: [
+    { mes: "Jul/25", valor: 9801 }, { mes: "Ago/25", valor: 14861 }, { mes: "Set/25", valor: 17397 },
+    { mes: "Out/25", valor: 19683 }, { mes: "Nov/25", valor: 14839 }, { mes: "Dez/25", valor: 12878 },
+    { mes: "Jan/26", valor: 18461 }, { mes: "Fev/26", valor: 15738 }, { mes: "Mar/26", valor: 11669 },
+  ],
+  // Deals won - mensal
+  won: [
+    { mes: "Jul/25", valor: 404 }, { mes: "Ago/25", valor: 556 }, { mes: "Set/25", valor: 790 },
+    { mes: "Out/25", valor: 762 }, { mes: "Nov/25", valor: 583 }, { mes: "Dez/25", valor: 682 },
+    { mes: "Jan/26", valor: 563 }, { mes: "Fev/26", valor: 420 }, { mes: "Mar/26", valor: 412 },
+  ],
+  // Deals lost - mensal
+  lost: [
+    { mes: "Jul/25", valor: 6766 }, { mes: "Ago/25", valor: 8683 }, { mes: "Set/25", valor: 11296 },
+    { mes: "Out/25", valor: 20830 }, { mes: "Nov/25", valor: 10411 }, { mes: "Dez/25", valor: 9967 },
+    { mes: "Jan/26", valor: 12940 }, { mes: "Fev/26", valor: 10373 }, { mes: "Mar/26", valor: 15058 },
+  ],
+  // Receita mensal (won * ticket)
+  receita: [
+    { mes: "Jul/25", valor: 34248397 }, { mes: "Ago/25", valor: 41890633 }, { mes: "Set/25", valor: 42404495 },
+    { mes: "Out/25", valor: 44845590 }, { mes: "Nov/25", valor: 22440622 }, { mes: "Dez/25", valor: 32448367 },
+    { mes: "Jan/26", valor: 29535529 }, { mes: "Fev/26", valor: 20231194 }, { mes: "Mar/26", valor: 24639000 },
+  ],
+};
+
+// Função utilitária de projeção
+export function projetar(serie: { mes: string; valor: number }[], mesesFuturo: number = 3): { otimista: number; realista: number; pessimista: number; tendencia: number; ultimo: number; media: number } {
+  const n = serie.length;
+  const ultimos3 = serie.slice(-3).map(s => s.valor);
+  const ultimo = ultimos3[2];
+  const media = Math.round(ultimos3.reduce((s, v) => s + v, 0) / 3);
+  const var1 = (ultimos3[1] - ultimos3[0]) / ultimos3[0];
+  const var2 = (ultimos3[2] - ultimos3[1]) / ultimos3[1];
+  const tendencia = (var1 + var2) / 2;
+
+  let acumR = 0, acumO = 0, acumP = 0;
+  let valR = ultimo, valO = ultimo, valP = ultimo;
+  for (let i = 0; i < mesesFuturo; i++) {
+    valR = Math.round(valR * (1 + tendencia));
+    valO = Math.round(valO * (1 + Math.max(tendencia + 0.10, 0.05)));
+    valP = Math.round(valP * (1 + Math.min(tendencia - 0.10, -0.05)));
+    acumR += Math.max(valR, Math.round(media * 0.3));
+    acumO += Math.max(valO, Math.round(media * 0.5));
+    acumP += Math.max(valP, Math.round(media * 0.2));
+  }
+  return { otimista: acumO, realista: acumR, pessimista: acumP, tendencia, ultimo, media };
+}
+
 // ============ LEADS ABERTOS ============
 export const leadsAbertos = [
   { setor: "SZI", leads: 684 },
