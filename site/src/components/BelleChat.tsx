@@ -323,14 +323,14 @@ export default function BelleChat() {
         {open ? (
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
         ) : (
-          <img src="/belle-avatar.svg" alt="Belle" className="w-10 h-10 rounded-full" />
+          <img src="/belle-avatar.png" alt="Belle" className="w-10 h-10 rounded-full" />
         )}
       </button>
 
       {open && (
         <div className="fixed bottom-24 right-6 z-50 w-[400px] max-h-[560px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
           <div className="bg-[#0F1B2D] px-4 py-3 flex items-center gap-3">
-            <img src="/belle-avatar.svg" alt="Belle" className="w-9 h-9 rounded-full object-cover" />
+            <img src="/belle-avatar.png" alt="Belle" className="w-9 h-9 rounded-full object-cover" />
             <div>
               <h3 className="text-sm font-semibold text-white">Belle - Analista Senior</h3>
               <p className="text-[10px] text-gray-400">Seazone | Respostas com origem, calculo e periodo</p>
