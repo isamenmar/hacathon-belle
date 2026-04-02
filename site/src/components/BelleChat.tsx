@@ -1,5 +1,6 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { belleKnowledge, formatCurrency, formatNumber, pipelineOverview, metricasComerciais, miaData, funnelByChannel, setores, funnelByEmpreendimento, facebookCampaigns2026, lostReasons, squads, empHealthScores, vendas2026, topSellers2026, teamPerformers2026, allEmpreendimentos2026, seriesTemporais, projetar } from "@/data";
 
 interface Message {
@@ -7,7 +8,24 @@ interface Message {
   text: string;
 }
 
-function generateResponse(input: string): string {
+// Mapa de contexto por página
+const pageContext: Record<string, { nome: string; elementos: string }> = {
+  "/": { nome: "Home (Dashboard Executivo)", elementos: "**Cards:** Deals Won (histórico), Valor Total Won, Win Rate, Ticket Médio, Leads Abertos\n**Gráficos:** Deals Won por Mês (barras — eixo X: meses, Y: número de deals), Funil de Vendas (barras horizontais — cada barra é uma etapa: Leads→MQL→SQL→OPP→Won), Won vs Lost (área — verde=ganhos, vermelho=perdas), Leads por Setor (pizza — fatias=SZI/SZS/Parceiros/Marketplace/Expansão)\n**Tabelas:** Motivos de Perda (com barra de progresso), Métricas Comerciais (CPL/CMQL/COPP/CPW), Taxas de Conversão por Canal, Métricas por Setor 2026" },
+  "/marketing": { nome: "Marketing & Campanhas", elementos: "**Cards:** Investimento Total FB (2026), Impressões, Cliques, CPL, CPW\n**Gráficos:** Conversões RD Station por Trimestre (linha — eixo X: trimestres, Y: conversões e contatos), Top Empreendimentos por Conversões (barras horizontais)\n**Tabelas:** Campanhas Facebook Ads com gasto/impressões/cliques/CPC/CTR, Funil MKT vs PARC (barras de progresso para cada etapa)" },
+  "/time": { nome: "Performance do Time", elementos: "**Cards:** Total Atividades 2026, Reuniões, Contratos, Analistas Ativos (todos Jan-Mar/2026)\n**Gráficos:** Top 10 por Volume (barras empilhadas — azul=calls, verde=WhatsApp, amarelo=mensagens, coral=reuniões), Radar de Canal Top 5 (cada ponta=tipo de atividade)\n**Tabelas:** Ranking de Atividades (24 analistas com calls/WhatsApp/mensagens/reuniões/contratos/no-shows/concluídas/% conclusão), Top Vendedores por Valor" },
+  "/mia": { nome: "MIA (IA Morada.ai)", elementos: "**Cards:** Total Atividades, Reuniões Agendadas, No-Shows (60%!), Reuniões Efetivas, Contratos (todos 2026)\n**Gráficos:** Distribuição de Atividades (pizza — calls/WhatsApp/mensagens/reuniões/no-shows), MIA vs Média Humana (barras comparativas — coral=MIA, cinza=humano)\n**Cards de análise:** Pontos Fortes (verde), Pontos de Melhoria (vermelho), Recomendações (coral), Impacto Estimado da Otimização" },
+  "/squads": { nome: "Squads Comerciais", elementos: "**Cards:** Squads Ativos, Membros, Leads Totais, Won Total, Alertas\n**Cards de Squad:** Cada squad mostra métricas de funil (Leads→Won), barra de ocupação (%), score de saúde, membros com função, empreendimentos com score, alertas\n**Gráficos:** Conversão por Squad (barras), Radar de Perfil, Leads vs Won (barras), Ocupação (pizza)\n**Tabelas:** Score de Saúde por Empreendimento, Rankings (membros/empreendimentos/previsão)" },
+  "/vendas": { nome: "Vendas", elementos: "**Cards:** Valor Total Vendido, Número de Vendas, Ticket Médio, Vendedores Ativos (todos 2026)\n**Gráficos:** Vendas por Empreendimento (barras horizontais — valor R$), Evolução Mensal (barras por mês), Vendas por Vendedor (barras horizontais), Vendas por Squad (pizza)\n**Tabelas:** Detalhamento de Vendas (empreendimento/vendedor/squad/valor/mês/pipeline), Ranking de Vendedores 2026 por valor" },
+};
+
+function getPageContext(pathname: string): { nome: string; elementos: string } {
+  if (pageContext[pathname]) return pageContext[pathname];
+  if (pathname.startsWith("/setores/")) return { nome: `Setor ${pathname.split("/")[2].toUpperCase()}`, elementos: "**Cards:** Won 2026, Lost 2026, Valor Total, Leads Abertos, Pipeline\n**Gráficos:** Won vs Lost mensal (área), Empreendimentos por Won (barras)\n**Tabela:** Funil por Empreendimento (leads/MQL/SQL/OPP/won/CPW/conversão)" };
+  if (pathname.startsWith("/empreendimentos/")) return { nome: `Empreendimento ${pathname.split("/")[2]}`, elementos: "**Cards:** Leads, MQL, Oportunidades, Won, CPW\n**Gráficos:** Funil de Vendas (barras horizontais), Taxas de Conversão (barras por etapa)\n**Cards de dados:** Investimento (com CPL/CMQL/COPP/CPW), Conversões de Leads 2026 (RD Station), Facebook Ads 2026 (gasto/cliques/CPC/CTR/plataforma/tipo), Squad Responsável" };
+  return { nome: "Dashboard", elementos: "Navegue para uma página específica para ter contexto detalhado." };
+}
+
+function generateResponse(input: string, pagina: string): string {
   const q = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
   // =====================================================
@@ -76,19 +94,22 @@ function generateResponse(input: string): string {
     }
   }
 
-  // --- EXPLICAÇÃO DE CARDS ---
-  if (q.includes("o que e isso") || q.includes("o que é isso") || q.includes("explica esse card") || q.includes("esse card") || q.includes("o que significa") || q.includes("o que quer dizer")) {
-    return `📊 **Como ler os cards do dashboard**\n\nCada card mostra um KPI (indicador-chave) com:\n\n• **Valor principal** — o número em destaque (ex: 12.515)\n• **Label** — o que o número representa (ex: "Deals Won")\n• **Subtítulo** — o período dos dados:\n  - "Histórico (Jul/2019 - Mar/2026)" = acumulado total\n  - "2026 (Jan-Mar)" = apenas dados deste ano\n  - "Snapshot atual" = valor neste momento\n• **Badge colorido** — tendência:\n  - 🟢 Verde (↑) = crescendo/positivo\n  - 🔴 Vermelho (↓) = caindo/negativo\n  - 🟡 Amarelo (→) = estável\n• **Cards escuros** = KPIs de destaque\n\n**Exemplos:**\n• "Deals Won: 12.515 (Histórico)" = total de vendas desde 2019\n• "Won Total: 455 (Jan-Mar/2026)" = vendas apenas em 2026\n• "Leads Abertos: 2.358 (Snapshot)" = leads em aberto agora\n\nPergunta sobre um card específico e eu explico em detalhe!`;
+  // --- CONTEXTO DE PÁGINA ---
+  const ctx = getPageContext(pagina);
+
+  // --- EXPLICAÇÃO DE CARDS (com contexto da página) ---
+  if (q.includes("o que e isso") || q.includes("o que é isso") || q.includes("explica esse card") || q.includes("esse card") || q.includes("o que significa") || q.includes("o que quer dizer") || q.includes("esse numero") || q.includes("esse número")) {
+    return `📊 **Você está na página: ${ctx.nome}**\n\n**Elementos desta página:**\n${ctx.elementos}\n\n---\n\n**Como ler os cards:**\n• Valor em destaque = métrica principal\n• Subtítulo = período ("Histórico", "2026 Jan-Mar" ou "Snapshot")\n• 🟢 Verde = positivo | 🔴 Vermelho = negativo | 🟡 Amarelo = neutro\n• Cards escuros = KPIs de destaque\n\nPergunta sobre um elemento específico e eu explico em detalhe!`;
   }
 
-  // --- EXPLICAÇÃO DE GRÁFICOS ---
+  // --- EXPLICAÇÃO DE GRÁFICOS (com contexto da página) ---
   if (q.includes("grafico") || q.includes("gráfico") || q.includes("explica esse grafico") || q.includes("o que mostra") || q.includes("esse chart") || q.includes("eixo")) {
-    return `📈 **Como ler os gráficos do dashboard**\n\n**Gráfico de barras verticais (Deals Won por Mês):**\n• Eixo X (horizontal) = meses (Jan/25 a Mar/26)\n• Eixo Y (vertical) = número de deals won\n• Cada barra = vendas daquele mês\n• Tendência: queda de 790 (Set/25) para 412 (Mar/26)\n\n**Gráfico de barras horizontais (Funil):**\n• Cada barra = uma etapa do funil\n• De cima para baixo: Leads → MQL → SQL → OPP → Won\n• O encurtamento mostra onde leads são perdidos\n• Maior gargalo: MQL→SQL (apenas 21,7% passa)\n\n**Gráfico de área (Won vs Lost):**\n• Área verde = deals ganhos por mês\n• Área vermelha = deals perdidos por mês\n• Quanto maior a vermelha vs verde, pior o desempenho\n\n**Pizza (Leads por Setor):**\n• Cada fatia = um setor (SZI, SZS, Parceiros, etc.)\n• Tamanho = proporção de leads abertos\n\n**Radar (Perfil do Time):**\n• Cada ponta = um tipo de atividade\n• Quanto mais perto da borda, maior o volume\n\nMe diga qual gráfico específico e eu explico!`;
+    return `📈 **Gráficos na página: ${ctx.nome}**\n\n${ctx.elementos.split("**Gráficos:**")[1]?.split("\n**Tabelas")[0] || ctx.elementos}\n\n---\n\n**Como ler gráficos:**\n• **Barras verticais:** Eixo X = categorias/meses, Y = valores. Altura = magnitude.\n• **Barras horizontais:** Usadas para ranking. Maior barra = maior valor.\n• **Área:** Mostra evolução temporal. A área preenchida indica volume.\n• **Pizza:** Proporção entre categorias. Fatia maior = maior participação.\n• **Radar:** Perfil multidimensional. Cada ponta = uma métrica diferente.\n\n**Cores padrão:**\n• Coral (#F06B5D) = métrica principal\n• Azul = calls/ligações\n• Verde = WhatsApp/positivo\n• Amarelo = mensagens/atenção\n• Cinza escuro = volume/comparativo\n\nMe diga qual gráfico específico quer entender!`;
   }
 
-  // --- EXPLICAÇÃO DE TABELAS ---
+  // --- EXPLICAÇÃO DE TABELAS (com contexto da página) ---
   if (q.includes("tabela") || q.includes("coluna") || q.includes("explica essa tabela") || q.includes("o que cada coluna")) {
-    return `📋 **Como ler as tabelas do dashboard**\n\n**Tabela "Taxas de Conversão por Canal":**\n• Canal: MKT (marketing pago), PARC (parceiros), Outros\n• Leads → MQL → SQL → OPP → Won: cada etapa do funil\n• Lead→Won: taxa final de conversão (mais importante)\n• Investimento: quanto foi gasto naquele canal\n\n**Tabela "Ranking de Atividades":**\n• #: posição no ranking\n• Total: soma de todas as atividades\n• Calls/WhatsApp/Mensagens: canais de contato\n• Reuniões: encontros realizados\n• Contratos: documentos assinados\n• No-Shows: reuniões não comparecidas\n• Concluídas / % Conclusão: eficiência operacional\n• Badge "IA" = Morada-Mia, "BOT" = Automação\n\n**Tabela "Score de Saúde":**\n• Score: 0-100 (🟢 ≥60 bom, 🟡 40-59 médio, 🔴 <40 crítico)\n• Baseado em: conversão + CPW + volume de vendas\n• Squad: a qual squad o empreendimento pertence\n\nMe diga qual tabela e eu detalho!`;
+    return `📋 **Tabelas na página: ${ctx.nome}**\n\n${ctx.elementos.split("**Tabelas:**")[1]?.split("\n**Cards")[0] || ctx.elementos}\n\n---\n\n**Colunas comuns:**\n• **#** = posição no ranking\n• **Won** = vendas concluídas (verde = positivo)\n• **Lost** = vendas perdidas (vermelho)\n• **CPW** = custo por venda (verde <R$500, amarelo R$500-3K, vermelho >R$3K)\n• **Lead→Won** = taxa de conversão final (coral)\n• **Score** = saúde 0-100 (🟢≥60 🟡40-59 🔴<40)\n• **Concluídas / %** = eficiência operacional\n• Badge **IA** = Morada-Mia | **BOT** = Automação\n\nMe diga qual tabela e eu detalho cada coluna!`;
   }
 
   // --- FUNIL (explicação didática) ---
@@ -315,9 +336,10 @@ function generateResponse(input: string): string {
 }
 
 export default function BelleChat() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "belle", text: "Olá! Sou a **Belle**, analista sênior de vendas e marketing da Seazone. Posso explicar qualquer métrica, identificar gargalos e recomendar ações. Pergunte qualquer coisa!" }
+    { role: "belle", text: "Olá! Sou a **Belle**, analista sênior da Seazone Saleszone. Posso explicar qualquer elemento do dashboard — cards, gráficos, tabelas, métricas. Pergunte qualquer coisa!" }
   ]);
   const [input, setInput] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
@@ -330,7 +352,7 @@ export default function BelleChat() {
     setInput("");
     setMessages(prev => [...prev, { role: "user", text: userMsg }]);
     setTimeout(() => {
-      setMessages(prev => [...prev, { role: "belle", text: generateResponse(userMsg) }]);
+      setMessages(prev => [...prev, { role: "belle", text: generateResponse(userMsg, pathname) }]);
     }, 500);
   };
 
