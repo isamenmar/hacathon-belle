@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { belleKnowledge, formatCurrency, formatNumber, pipelineOverview, metricasComerciais, miaData, funnelByChannel, setores, funnelByEmpreendimento, facebookCampaigns2026, lostReasons, squads, empHealthScores } from "@/data";
+import { belleKnowledge, formatCurrency, formatNumber, pipelineOverview, metricasComerciais, miaData, funnelByChannel, setores, funnelByEmpreendimento, facebookCampaigns2026, lostReasons, squads, empHealthScores, vendas2026 } from "@/data";
 
 interface Message {
   role: "user" | "belle";
@@ -83,8 +83,16 @@ function generateResponse(input: string): string {
     return `🔄 **Funil por Canal**\n\n${funnelByChannel.map(ch => `**${ch.canal}**: ${formatNumber(ch.leads)} leads → ${ch.won} won (${((ch.won / ch.leads) * 100).toFixed(2)}%)`).join("\n")}\n\n**Insight principal:** Canal PARC converte 6,8x mais que MKT com custo zero. Investir em expansão de parceiros tem ROI infinito.`;
   }
 
+  // Vendas
+  if (q.includes("venda") || q.includes("vendas") || q.includes("receita") || q.includes("faturamento")) {
+    const totalValor = vendas2026.reduce((s, v) => s + v.valor, 0);
+    const totalDeals = vendas2026.length;
+    const byVendedor = Object.entries(vendas2026.reduce((acc, v) => { acc[v.vendedor] = (acc[v.vendedor] || 0) + v.valor; return acc; }, {} as Record<string, number>)).sort((a, b) => b[1] - a[1]);
+    return `💰 **Vendas 2026 (Jan-Mar)**\n\n• Total: ${formatCurrency(totalValor)} em ${totalDeals} deals\n• Ticket médio: ${formatCurrency(Math.round(totalValor / totalDeals))}\n\n**Top vendedores por valor:**\n${byVendedor.slice(0, 5).map(([nome, val]) => `• ${nome}: ${formatCurrency(val)}`).join("\n")}\n\n**Insight:** Luana Schaikoski e Filipe Padoveze (membros dos squads) concentram os maiores valores por deal.`;
+  }
+
   // Default
-  return `Olá! Sou a **Belle**, sua analista de vendas e marketing. Posso ajudar com:\n\n• **Definições** - "O que é CPL?", "O que é MQL?"\n• **Gargalos** - "Quais são os gargalos do funil?"\n• **Campanhas** - "Como estão as campanhas?"\n• **Setores** - "Métricas por setor"\n• **Empreendimentos** - "Qual melhor empreendimento?"\n• **MIA** - "Como está a performance da IA?"\n• **Previsões** - "Qual a projeção de vendas?"\n• **Perdas** - "Por que estamos perdendo deals?"`;
+  return `Olá! Sou a **Belle**, sua analista de vendas e marketing. Posso ajudar com:\n\n• **Definições** - "O que é CPL?", "O que é MQL?"\n• **Gargalos** - "Quais são os gargalos do funil?"\n• **Campanhas** - "Como estão as campanhas?"\n• **Vendas** - "Como estão as vendas?"\n• **Squads** - "Como estão os squads?"\n• **Setores** - "Métricas por setor"\n• **Empreendimentos** - "Qual melhor empreendimento?"\n• **MIA** - "Como está a performance da IA?"\n• **Previsões** - "Qual a projeção de vendas?"\n• **Perdas** - "Por que estamos perdendo deals?"`;
 }
 
 export default function BelleChat() {
@@ -123,9 +131,7 @@ export default function BelleChat() {
       {open && (
         <div className="fixed bottom-24 right-6 z-50 w-[380px] max-h-[520px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden">
           <div className="bg-[#0F1B2D] px-4 py-3 flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#F06B5D] rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xs">B</span>
-            </div>
+            <img src="/belle-avatar.jpg" alt="Belle" className="w-8 h-8 rounded-full object-cover" />
             <div>
               <h3 className="text-sm font-semibold text-white">Belle</h3>
               <p className="text-[10px] text-gray-400">Analista IA • Seazone</p>

@@ -130,18 +130,18 @@ export const miaData = {
 
 // ============ FACEBOOK ADS 2026 (SZI) ============
 export const facebookCampaigns2026 = [
-  { nome: "Barra Grande Spot (BA/MG)", gasto: 100395, impressoes: 2875621, cliques: 26069, cpc: 4.50, ctr: 1.04, setor: "SZI", regiao: "BA/MG" },
-  { nome: "Natal Spot (RN/CE/PB)", gasto: 89816, impressoes: 4559596, cliques: 30236, cpc: 3.50, ctr: 0.89, setor: "SZI", regiao: "RN/CE/PB" },
-  { nome: "Jurerê Spot III (RS/SC/PR)", gasto: 73421, impressoes: 2756766, cliques: 19733, cpc: 4.14, ctr: 0.78, setor: "SZI", regiao: "RS/SC/PR" },
-  { nome: "Barra Grande Spot II (BA/MG)", gasto: 58454, impressoes: 1453473, cliques: 14047, cpc: 5.04, ctr: 1.00, setor: "SZI", regiao: "BA/MG" },
-  { nome: "Ponta das Canas II (RS/SC/PR)", gasto: 58217, impressoes: 3004363, cliques: 34305, cpc: 2.23, ctr: 1.94, setor: "SZI", regiao: "RS/SC/PR" },
-  { nome: "Natal Spot II (RN/CE/PB)", gasto: 56284, impressoes: 1469169, cliques: 13651, cpc: 4.44, ctr: 0.97, setor: "SZI", regiao: "RN/CE/PB" },
-  { nome: "Ponta das Canas (RS/SC/PR)", gasto: 55413, impressoes: 1922679, cliques: 32807, cpc: 1.86, ctr: 1.91, setor: "SZI", regiao: "RS/SC/PR" },
-  { nome: "Jurerê Spot II (RS/SC/PR)", gasto: 44636, impressoes: 1059138, cliques: 13431, cpc: 3.63, ctr: 1.42, setor: "SZI", regiao: "RS/SC/PR" },
-  { nome: "Jurerê Spot II v2 (RS/SC/PR)", gasto: 37849, impressoes: 870927, cliques: 8654, cpc: 5.01, ctr: 1.05, setor: "SZI", regiao: "RS/SC/PR" },
-  { nome: "Novo Campeche II (RS/SC/PR)", gasto: 28567, impressoes: 618897, cliques: 5820, cpc: 5.50, ctr: 1.11, setor: "SZI", regiao: "RS/SC/PR" },
-  { nome: "Vistas de Anitá (RS/SC/PR)", gasto: 22813, impressoes: 754155, cliques: 11342, cpc: 2.73, ctr: 1.45, setor: "SZI", regiao: "RS/SC/PR" },
-  { nome: "Bonito Spot II (MS/MT/PR/GO)", gasto: 4197, impressoes: 116977, cliques: 1137, cpc: 3.49, ctr: 1.18, setor: "SZI", regiao: "MS/MT/PR/GO" },
+  { nome: "Barra Grande Spot (BA/MG)", gasto: 100395, impressoes: 2875621, cliques: 26069, cpc: 4.50, ctr: 1.04, setor: "SZI", regiao: "BA/MG", plataforma: "Meta (Facebook + Instagram)", tipo: "Video" },
+  { nome: "Natal Spot (RN/CE/PB)", gasto: 89816, impressoes: 4559596, cliques: 30236, cpc: 3.50, ctr: 0.89, setor: "SZI", regiao: "RN/CE/PB", plataforma: "Meta (Facebook + Instagram)", tipo: "Video" },
+  { nome: "Jurerê Spot III (RS/SC/PR)", gasto: 73421, impressoes: 2756766, cliques: 19733, cpc: 4.14, ctr: 0.78, setor: "SZI", regiao: "RS/SC/PR", plataforma: "Meta (Facebook + Instagram)", tipo: "Imagem" },
+  { nome: "Barra Grande Spot II (BA/MG)", gasto: 58454, impressoes: 1453473, cliques: 14047, cpc: 5.04, ctr: 1.00, setor: "SZI", regiao: "BA/MG", plataforma: "Meta (Facebook)", tipo: "Carrossel" },
+  { nome: "Ponta das Canas II (RS/SC/PR)", gasto: 58217, impressoes: 3004363, cliques: 34305, cpc: 2.23, ctr: 1.94, setor: "SZI", regiao: "RS/SC/PR", plataforma: "Meta (Facebook + Instagram)", tipo: "Video" },
+  { nome: "Natal Spot II (RN/CE/PB)", gasto: 56284, impressoes: 1469169, cliques: 13651, cpc: 4.44, ctr: 0.97, setor: "SZI", regiao: "RN/CE/PB", plataforma: "Meta (Facebook)", tipo: "Imagem" },
+  { nome: "Ponta das Canas (RS/SC/PR)", gasto: 55413, impressoes: 1922679, cliques: 32807, cpc: 1.86, ctr: 1.91, setor: "SZI", regiao: "RS/SC/PR", plataforma: "Meta (Facebook + Instagram)", tipo: "Video" },
+  { nome: "Jurerê Spot II (RS/SC/PR)", gasto: 44636, impressoes: 1059138, cliques: 13431, cpc: 3.63, ctr: 1.42, setor: "SZI", regiao: "RS/SC/PR", plataforma: "Meta (Facebook)", tipo: "Imagem" },
+  { nome: "Jurerê Spot II v2 (RS/SC/PR)", gasto: 37849, impressoes: 870927, cliques: 8654, cpc: 5.01, ctr: 1.05, setor: "SZI", regiao: "RS/SC/PR", plataforma: "Meta (Instagram)", tipo: "Video" },
+  { nome: "Novo Campeche II (RS/SC/PR)", gasto: 28567, impressoes: 618897, cliques: 5820, cpc: 5.50, ctr: 1.11, setor: "SZI", regiao: "RS/SC/PR", plataforma: "Meta (Facebook)", tipo: "Imagem" },
+  { nome: "Vistas de Anitá (RS/SC/PR)", gasto: 22813, impressoes: 754155, cliques: 11342, cpc: 2.73, ctr: 1.45, setor: "SZI", regiao: "RS/SC/PR", plataforma: "Meta (Facebook + Instagram)", tipo: "Video" },
+  { nome: "Bonito Spot II (MS/MT/PR/GO)", gasto: 4197, impressoes: 116977, cliques: 1137, cpc: 3.49, ctr: 1.18, setor: "SZI", regiao: "MS/MT/PR/GO", plataforma: "Meta (Facebook)", tipo: "Carrossel" },
 ];
 
 // ============ RD STATION 2026 ============
@@ -405,3 +405,33 @@ export const empHealthScores = [...sq1Emps, ...sq2Emps].map(e => ({
   conversoes2026: e.conversoes2026,
   squad: squads.find(s => s.empreendimentos.some(se => se.nome === e.nome))?.nome.split(" - ")[0] || "N/A",
 }));
+
+// ============ VENDAS 2026 ============
+export const vendas2026 = [
+  { vendedor: "Filipe Padoveze", squad: "Squad 2", empreendimento: "Barra Grande Spot", valor: 315653, mes: "Jan/26", pipeline: 28 },
+  { vendedor: "Filipe Padoveze", squad: "Squad 2", empreendimento: "Natal Spot", valor: 248000, mes: "Jan/26", pipeline: 28 },
+  { vendedor: "Filipe Padoveze", squad: "Squad 2", empreendimento: "Caraguá Spot", valor: 214141, mes: "Feb/26", pipeline: 28 },
+  { vendedor: "Luana Schaikoski", squad: "Squad 1", empreendimento: "Marista 144 Spot", valor: 320447, mes: "Jan/26", pipeline: 28 },
+  { vendedor: "Luana Schaikoski", squad: "Squad 1", empreendimento: "Vistas de Anitá 2", valor: 285000, mes: "Feb/26", pipeline: 28 },
+  { vendedor: "Luana Schaikoski", squad: "Squad 1", empreendimento: "Jurerê Spot III", valor: 310000, mes: "Jan/26", pipeline: 28 },
+  { vendedor: "Luana Schaikoski", squad: "Squad 1", empreendimento: "Ponta das Canas Spot II", valor: 295000, mes: "Mar/26", pipeline: 28 },
+  { vendedor: "Carol Rosário", squad: "N/A", empreendimento: "Barra Grande Spot", valor: 56930, mes: "Jan/26", pipeline: 28 },
+  { vendedor: "Carol Rosário", squad: "N/A", empreendimento: "Natal Spot", valor: 62000, mes: "Feb/26", pipeline: 28 },
+  { vendedor: "Eduardo Albani", squad: "N/A", empreendimento: "Marista 144 Spot", valor: 37575, mes: "Jan/26", pipeline: 28 },
+  { vendedor: "Eduardo Albani", squad: "N/A", empreendimento: "Jurerê Spot II", valor: 42000, mes: "Feb/26", pipeline: 28 },
+  { vendedor: "Eduardo Albani", squad: "N/A", empreendimento: "Ponta das Canas Spot II", valor: 38500, mes: "Mar/26", pipeline: 28 },
+  { vendedor: "Fabio Cristiano", squad: "N/A", empreendimento: "Barra Grande Spot", valor: 315653, mes: "Feb/26", pipeline: 37 },
+  { vendedor: "Fabio Cristiano", squad: "N/A", empreendimento: "Marista 144 Spot", valor: 298000, mes: "Mar/26", pipeline: 37 },
+  { vendedor: "Amanda Peixoto", squad: "N/A", empreendimento: "Vistas de Anitá 2", valor: 236795, mes: "Jan/26", pipeline: 28 },
+  { vendedor: "Amanda Peixoto", squad: "N/A", empreendimento: "Jurerê Spot III", valor: 245000, mes: "Mar/26", pipeline: 28 },
+  { vendedor: "Priscila Pestana", squad: "N/A", empreendimento: "Ponta das Canas Spot II", valor: 301181, mes: "Feb/26", pipeline: 28 },
+  { vendedor: "Priscila Pestana", squad: "N/A", empreendimento: "Natal Spot", valor: 288000, mes: "Mar/26", pipeline: 28 },
+  { vendedor: "Giovanna Zanchetta", squad: "N/A", empreendimento: "Bonito Spot", valor: 12585, mes: "Jan/26", pipeline: 14 },
+  { vendedor: "Giovanna Zanchetta", squad: "N/A", empreendimento: "Caraguá Spot", valor: 15000, mes: "Feb/26", pipeline: 14 },
+  { vendedor: "Gabriela Branco", squad: "N/A", empreendimento: "Bonito Spot", valor: 1332, mes: "Jan/26", pipeline: 14 },
+  { vendedor: "Gabriela Branco", squad: "N/A", empreendimento: "Caraguá Spot", valor: 1500, mes: "Mar/26", pipeline: 14 },
+  { vendedor: "Gabriel Zonatto", squad: "N/A", empreendimento: "Barra Grande Spot", valor: 0, mes: "Jan/26", pipeline: 7 },
+  { vendedor: "Gabriel Zonatto", squad: "N/A", empreendimento: "Natal Spot", valor: 0, mes: "Feb/26", pipeline: 7 },
+  { vendedor: "Pedro Eckert", squad: "N/A", empreendimento: "Marista 144 Spot", valor: 0, mes: "Jan/26", pipeline: 7 },
+  { vendedor: "Pedro Eckert", squad: "N/A", empreendimento: "Ponta das Canas Spot II", valor: 0, mes: "Mar/26", pipeline: 7 },
+];
