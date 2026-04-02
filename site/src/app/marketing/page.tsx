@@ -20,7 +20,7 @@ export default function MarketingPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Marketing & Campanhas</h1>
-        <p className="text-sm text-gray-500 mt-1">Performance de campanhas Facebook Ads + RD Station | 2024-2026</p>
+        <p className="text-sm text-gray-500 mt-1">Performance de campanhas e geração de leads | 2024-2026</p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
@@ -34,7 +34,7 @@ export default function MarketingPage() {
       <div className="bg-[#FFF5F3] border border-[#F06B5D]/20 rounded-xl p-4">
         <h3 className="text-sm font-semibold text-[#F06B5D] mb-2">Insights de Marketing</h3>
         <ul className="text-xs text-gray-600 space-y-1">
-          <li>Facebook Ads gera 65%+ de todas as conversões no RD Station (146.922 conversões)</li>
+          <li>Facebook Ads gera 65%+ de todas as leads gerados (146.922 conversões)</li>
           <li>Campanhas CBO regionais (RS/SC/PR) têm CTR superior (2,06-2,26%) vs nacionais (1,0-1,6%)</li>
           <li>Caraguá Spot tem melhor CPC (R$ 1,73) e maior CTR (3,21%)</li>
           <li>Volume de conversões cresceu 173% de 2024 para 2026</li>
@@ -42,7 +42,7 @@ export default function MarketingPage() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-4">
-        <ChartWrapper title="Conversões RD Station por Trimestre" subtitle="2024-2026">
+        <ChartWrapper title="Leads Gerados por Trimestre" subtitle="2024-2026">
           <ResponsiveContainer>
             <LineChart data={rdConversionsByMonth}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -56,7 +56,7 @@ export default function MarketingPage() {
           </ResponsiveContainer>
         </ChartWrapper>
 
-        <ChartWrapper title="Top Empreendimentos por Conversões (RD Station)" subtitle="Total histórico">
+        <ChartWrapper title="Top Empreendimentos por Leads Gerados" subtitle="Total histórico">
           <ResponsiveContainer>
             <BarChart data={rdTop2026.slice(0, 8)} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />

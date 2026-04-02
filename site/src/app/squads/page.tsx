@@ -152,7 +152,7 @@ export default function SquadsPage() {
                       <th className="text-right py-1.5 px-2">Leads</th>
                       <th className="text-right py-1.5 px-2">Won</th>
                       <th className="text-right py-1.5 px-2">CPW</th>
-                      <th className="text-right py-1.5 px-2">Conv. de Leads 2026</th>
+                      <th className="text-right py-1.5 px-2">Leads 2026</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -321,7 +321,7 @@ export default function SquadsPage() {
                 <th className="text-right py-2 px-3">Conversao</th>
                 <th className="text-right py-2 px-3">CPW</th>
                 <th className="text-right py-2 px-3">Won</th>
-                <th className="text-right py-2 px-3">Conv. Leads 2026</th>
+                <th className="text-right py-2 px-3">Leads 2026</th>
                 <th className="text-center py-2 px-3">Status</th>
               </tr>
             </thead>

@@ -94,7 +94,7 @@ export default function EmpreendimentoPage() {
         {leads > 0 ? (
           <KpiCard label="Leads" value={formatNumber(leads)} highlight />
         ) : (
-          <KpiCard label="Conv. Leads 2026" value={formatNumber(conversoes2026)} highlight />
+          <KpiCard label="Leads 2026" value={formatNumber(conversoes2026)} highlight />
         )}
         <KpiCard label="MQL" value={leads > 0 ? formatNumber(mql) : "-"} />
         <KpiCard label="Oportunidades" value={leads > 0 ? formatNumber(opp) : "-"} />
@@ -163,18 +163,18 @@ export default function EmpreendimentoPage() {
           )}
         </div>
 
-        {/* RD Station 2026 */}
+        {/* Leads Gerados 2026 */}
         <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-          <h3 className="text-xs text-gray-500 uppercase tracking-wider mb-2">Conversoes de Leads 2026</h3>
+          <h3 className="text-xs text-gray-500 uppercase tracking-wider mb-2">Leads Gerados 2026</h3>
           {(rdEmp || emp2026) ? (
             <>
               <p className="text-2xl font-bold text-[#0F1B2D]">{formatNumber(rdEmp?.conversoes || emp2026?.conversoes2026 || 0)}</p>
-              <p className="text-xs text-gray-400 mt-1">conversoes (RD Station)</p>
+              <p className="text-xs text-gray-400 mt-1">leads gerados</p>
               <p className="text-lg font-semibold text-[#F06B5D] mt-2">{formatNumber(rdEmp?.contatos || emp2026?.contatos || 0)}</p>
               <p className="text-xs text-gray-400">contatos únicos</p>
             </>
           ) : (
-            <p className="text-sm text-gray-400">Sem dados de conversao em 2026</p>
+            <p className="text-sm text-gray-400">Sem dados de leads em 2026</p>
           )}
         </div>
 
