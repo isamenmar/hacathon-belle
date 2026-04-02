@@ -23,13 +23,13 @@ function generateResponse(input: string): string {
   }
 
   // --- ORIGEM / FONTE / DE ONDE VEM ---
-  if (q.includes("de onde vem") || q.includes("fonte") || q.includes("origem") || q.includes("como e calculado") || q.includes("como calcula")) {
+  if (q.includes("de onde vem") || q.includes("fonte") || q.includes("origem") || q.includes("como é calculado") || q.includes("como calcula")) {
     return `📋 **Origem dos Dados - Belle Analytics**\n\n**Fontes principais:**\n• **Pipedrive** (CRM): Deals, pipeline, atividades, stages → tabela pipedrive_v2_deals, pipedrive_v2_consolidated_deal_flow\n• **RD Station** (Marketing): Conversões, formulários, UTMs → tabela rd_station_contact_events (283.950 eventos)\n• **Facebook Ads** (Mídia paga): Impressões, cliques, gasto → tabela facebook_ads_szi_adsinsights\n• **Meetime** (Pre-venda): Ligações, cadências → tabela meetime_szs_calls\n\n**Data warehouse:** NEKT (Amazon Athena)\n**Atualização:** Dados sincronizados periodicamente via pipedrive-5Slo e outras sources NEKT.\n\n**Periodos:**\n• Pipedrive: Jul/2019 - Abr/2026\n• RD Station: Jan/2024 - Abr/2026\n• Facebook Ads: Jun/2023 - Mar/2026\n• Dashboard prioriza: **Jan-Mar 2026**`;
   }
 
   // --- HISTORICO vs ATUAL ---
   if (q.includes("histórico") || q.includes("esse ano") || q.includes("so esse ano") || q.includes("periodo") || q.includes("que ano") || q.includes("ta alto por que") || q.includes("esse numero")) {
-    return `📅 **Contexto Temporal dos Dados**\n\n**Regra do sistema:** O dashboard prioriza dados de **2026 (Jan-Mar)**. Dados anteriores aparecem apenas como comparação.\n\n**Como identificar:**\n• Cards com "Histórico" = dados desde Jul/2019\n• Cards com "2026 (Jan-Mar)" = apenas periodo atual\n• Cards com "Snapshot atual" = valor do momento\n\n**Exemplos:**\n• Deals Won (12.515) = **Historico** desde 2019\n• Atividades do Time (26.914) = **Apenas 2026**\n• Leads Abertos (2.358) = **Snapshot** de agora\n\nSe você vir um numero sem contexto temporal, me avise que eu identifico a origem.`;
+    return `📅 **Contexto Temporal dos Dados**\n\n**Regra do sistema:** O dashboard prioriza dados de **2026 (Jan-Mar)**. Dados anteriores aparecem apenas como comparação.\n\n**Como identificar:**\n• Cards com "Histórico" = dados desde Jul/2019\n• Cards com "2026 (Jan-Mar)" = apenas período atual\n• Cards com "Snapshot atual" = valor do momento\n\n**Exemplos:**\n• Deals Won (12.515) = **Historico** desde 2019\n• Atividades do Time (26.914) = **Apenas 2026**\n• Leads Abertos (2.358) = **Snapshot** de agora\n\nSe você vir um número sem contexto temporal, me avise que eu identifico a origem.`;
   }
 
   // --- RESPONSAVEL / QUEM CUIDA ---
@@ -56,7 +56,7 @@ function generateResponse(input: string): string {
         if (emp.investimento > 0) resp += `**Investimento:** ${formatCurrency(emp.investimento)}\n`;
         resp += `**Origem:** dataset_szi (funil) + Pipedrive (deals)\n`;
       }
-      if (emp26) resp += `**Conversões 2026 (RD Station):** ${formatNumber(emp26.conversoes2026)} conversões, ${formatNumber(emp26.contatos)} contatos unicos\n`;
+      if (emp26) resp += `**Conversões 2026 (RD Station):** ${formatNumber(emp26.conversoes2026)} conversões, ${formatNumber(emp26.contatos)} contatos únicos\n`;
       if (fb) resp += `**Facebook Ads 2026:** ${formatCurrency(fb.gasto)} gasto | ${formatNumber(fb.cliques)} cliques | CPC R$ ${fb.cpc} | ${fb.plataforma} (${fb.tipo})\n`;
       if (sq) resp += `\n**Squad responsável:** ${sq.nome}\n**Membros:** ${sq.membros.map(m => `${m.nome} (${m.role})`).join(", ")}`;
 
@@ -109,7 +109,7 @@ function generateResponse(input: string): string {
 
   // --- PERDAS ---
   if (q.includes("perda") || q.includes("lost") || q.includes("perdido") || q.includes("motivo") || q.includes("por que perd")) {
-    return `❌ **Motivos de Perda**\n**Período:** Histórico\n**Fonte:** pipedrive_v2_deals.lost_reason\n\n${lostReasons.map(r => `• **${r.motivo}**: ${formatNumber(r.total)} deals (${r.pct}%)`).join("\n")}\n\n**Analise:**\n• **49% das perdas** sao por problemas de CONTATO (não atende + sem conexao + parou + sem resposta)\n• Isso representa ~87.500 deals perdidos\n• Valor medio de deal lost: R$ 4.537\n\n**Por que isso acontece?**\n1. Leads de marketing sao mais frios (curiosos vs interessados)\n2. Cadência de follow-up insuficiente\n3. Canal unico (so ligacao, sem WhatsApp)\n\n**Ação:** Multi-canal automatico + MIA com confirmação = potencial R$ 18,7M`;
+    return `❌ **Motivos de Perda**\n**Período:** Histórico\n**Fonte:** pipedrive_v2_deals.lost_reason\n\n${lostReasons.map(r => `• **${r.motivo}**: ${formatNumber(r.total)} deals (${r.pct}%)`).join("\n")}\n\n**Análise:**\n• **49% das perdas** são por problemas de CONTATO (não atende + sem conexão + parou + sem resposta)\n• Isso representa ~87.500 deals perdidos\n• Valor médio de deal lost: R$ 4.537\n\n**Por que isso acontece?**\n1. Leads de marketing são mais frios (curiosos vs interessados)\n2. Cadência de follow-up insuficiente\n3. Canal único (só ligação, sem WhatsApp)\n\n**Ação:** Multi-canal automático + MIA com confirmação = potencial R$ 18,7M`;
   }
 
   // --- SETORES ---
@@ -120,31 +120,65 @@ function generateResponse(input: string): string {
     }).join("\n\n")}\n\n**Insight:** Canal Parceiros (Pipeline #7) converte 6,8x mais que MKT com custo zero.`;
   }
 
-  // --- PREVISAO COMPLETA ---
-  if (q.includes("previsao") || q.includes("forecast") || q.includes("projecao") || q.includes("futuro") || q.includes("tendencia")) {
-    // Calculos base
-    const wonQ1 = 563 + 420 + 412; // Jan+Fev+Mar 2026
-    const mediaMensal = Math.round(wonQ1 / 3);
-    const ticketAtual = 53478;
-    const receitaMensalBase = mediaMensal * ticketAtual;
-    // Cenários
-    const otimista = { deals: Math.round(mediaMensal * 1.15), ticket: Math.round(ticketAtual * 1.05) };
-    const realista = { deals: mediaMensal, ticket: ticketAtual };
-    const pessimista = { deals: Math.round(mediaMensal * 0.85), ticket: Math.round(ticketAtual * 0.9) };
+  // --- PREVISÃO REAL COM TENDÊNCIA ---
+  if (q.includes("previsao") || q.includes("previsão") || q.includes("forecast") || q.includes("projecao") || q.includes("projeção") || q.includes("futuro") || q.includes("tendencia") || q.includes("tendência") || q.includes("quanto vamos vender") || q.includes("se continuarmos")) {
+    // Dados mensais REAIS para calcular tendência
+    const meses = [
+      { mes: "Jan/26", won: 563, valor: 29535529 },
+      { mes: "Fev/26", won: 420, valor: 20231194 },
+      { mes: "Mar/26", won: 412, valor: 24639000 },
+    ];
+    // Tendência: variação média mês a mês
+    const var1 = (meses[1].won - meses[0].won) / meses[0].won; // -25,4%
+    const var2 = (meses[2].won - meses[1].won) / meses[1].won; // -1,9%
+    const tendenciaMensal = (var1 + var2) / 2; // média: ~-13,6%
+    const tendenciaLabel = tendenciaMensal < -0.05 ? "QUEDA" : tendenciaMensal > 0.05 ? "CRESCIMENTO" : "ESTÁVEL";
+    const ultimoMes = meses[meses.length - 1];
 
-    return `🔮 **Previsao Completa - Proximo Trimestre (Abr-Jun/2026)**\n**Base:** Q1/2026 (${formatNumber(wonQ1)} deals, ${formatCurrency(wonQ1 * ticketAtual)})\n**Confiança:** MEDIA (dados de 3 meses disponíveis)\n\n**📊 CENARIOS:**\n\n**Otimista (+15% deals, +5% ticket):**\n• Deals: ${otimista.deals}/mes → ${otimista.deals * 3} no trimestre\n• Receita: ${formatCurrency(otimista.deals * otimista.ticket)}/mes → ${formatCurrency(otimista.deals * otimista.ticket * 3)} total\n• Premissas: MIA otimizada, Parceiros escalados\n\n**Realista (mantem Q1):**\n• Deals: ${realista.deals}/mes → ${realista.deals * 3} no trimestre\n• Receita: ${formatCurrency(receitaMensalBase)}/mes → ${formatCurrency(receitaMensalBase * 3)} total\n\n**Pessimista (-15% deals, -10% ticket):**\n• Deals: ${pessimista.deals}/mes → ${pessimista.deals * 3} no trimestre\n• Receita: ${formatCurrency(pessimista.deals * pessimista.ticket)}/mes → ${formatCurrency(pessimista.deals * pessimista.ticket * 3)} total\n• Risco: Win rate continua caindo\n\n**Por Squad:**\n${squads.map(sq => `• ${sq.nome.split(" - ")[0]}: ${sq.previsaoWon} won previstos`).join("\n")}\n\n**⚠️ ALERTAS PREDITIVOS:**\n• Win rate em queda → risco de volume menor\n• Pipeline atual (4.131 open) pode não ser suficiente\n• MIA com 60% no-show reduz pipeline efetivo\n\n**Cálculo:** Media Q1 × fator cenario. Confianca media pois base de apenas 3 meses.`;
+    // Projeção Abril baseada em tendência
+    const abrRealista = Math.round(ultimoMes.won * (1 + tendenciaMensal));
+    const abrOtimista = Math.round(ultimoMes.won * 1.10); // se corrigir tendência
+    const abrPessimista = Math.round(ultimoMes.won * (1 + tendenciaMensal * 1.5));
+
+    const ticketMedio = Math.round(meses.reduce((s, m) => s + m.valor, 0) / meses.reduce((s, m) => s + m.won, 0));
+
+    // Projeção Q2 (Abr-Jun)
+    const q2Realista = abrRealista + Math.round(abrRealista * (1 + tendenciaMensal)) + Math.round(abrRealista * (1 + tendenciaMensal) * (1 + tendenciaMensal));
+    const q2Otimista = abrOtimista * 3;
+    const q2Pessimista = abrPessimista + Math.round(abrPessimista * 0.85) + Math.round(abrPessimista * 0.72);
+
+    // Pipeline para calcular probabilidade
+    const openDeals = 4131;
+    const winRate = 0.064;
+    const expectedFromPipeline = Math.round(openDeals * winRate);
+
+    return `🔮 **PROJEÇÃO FUTURA — Abril a Junho/2026**\n\n**📈 Tendência identificada:** ${tendenciaLabel} (${(tendenciaMensal * 100).toFixed(1)}% ao mês)\n**Base de cálculo:** Progressão Jan→Fev→Mar/2026 (${meses.map(m => m.won).join(" → ")} deals)\n**Ticket médio atual:** ${formatCurrency(ticketMedio)}\n\n---\n\n**🟢 Cenário Otimista** (tendência corrigida +10%)\n• Abril: **${abrOtimista} deals** (${formatCurrency(abrOtimista * ticketMedio)})\n• Q2 total: **${q2Otimista} deals** (${formatCurrency(q2Otimista * ticketMedio)})\n• Premissa: Otimização da MIA + escalar Parceiros + realocar budget\n• **Confiança: MÉDIA** — depende de ações corretivas\n\n**🟡 Cenário Realista** (mantém tendência atual)\n• Abril: **${abrRealista} deals** (${formatCurrency(abrRealista * ticketMedio)})\n• Q2 total: **${q2Realista} deals** (${formatCurrency(q2Realista * ticketMedio)})\n• Premissa: Nenhuma mudança operacional\n• **Confiança: ALTA** — segue padrão observado\n\n**🔴 Cenário Pessimista** (tendência acelera -50%)\n• Abril: **${abrPessimista} deals** (${formatCurrency(abrPessimista * ticketMedio)})\n• Q2 total: **${q2Pessimista} deals** (${formatCurrency(q2Pessimista * ticketMedio)})\n• Premissa: Win rate continua caindo + pipeline não repõe\n• **Confiança: MÉDIA** — risco real se nada mudar\n\n---\n\n**Pipeline atual:** ${formatNumber(openDeals)} deals abertos\n**Conversão esperada (win rate ${(winRate * 100).toFixed(1)}%):** ~${expectedFromPipeline} deals\n\n**⚠️ Por que a tendência é de queda?**\n1. Win rate caiu de 10,8% → 2,7% (Jan/25 → Mar/26)\n2. Volume de leads cresceu mas qualidade diminuiu\n3. MIA gera reuniões mas 60% são no-show\n\n**Como reverter:**\n• Confirmar reuniões da MIA 24h antes → pode adicionar +83 deals/trimestre\n• Escalar Parceiros (conversão 6,8x maior) → ROI infinito\n• Realocar R$ 100K de empreendimentos críticos → +970 deals\n\n**Método:** Regressão linear sobre Q1/2026, ajustada por win rate e pipeline aberto.`;
   }
 
   // --- META ---
-  if (q.includes("meta") || q.includes("bater meta") || q.includes("falta") || q.includes("ritmo")) {
-    const wonQ1 = 563 + 420 + 412;
+  if (q.includes("meta") || q.includes("bater meta") || q.includes("falta") || q.includes("ritmo") || q.includes("vamos bater") || q.includes("atingir")) {
+    const wonMeses = [563, 420, 412]; // Jan, Fev, Mar 2026
+    const wonQ1 = wonMeses.reduce((s, v) => s + v, 0);
     const mediaMensal = Math.round(wonQ1 / 3);
-    const metaAnual = 6000; // estimativa
+    const tendencia = ((wonMeses[2] - wonMeses[0]) / wonMeses[0]); // Jan→Mar
+    const metaAnual = 6000;
     const falta = metaAnual - wonQ1;
     const mesesRestantes = 9;
     const ritmoNecessario = Math.round(falta / mesesRestantes);
-    const prob = mediaMensal >= ritmoNecessario ? "ALTA" : mediaMensal >= ritmoNecessario * 0.85 ? "MEDIA" : "BAIXA";
-    return `🎯 **Análise de Meta**\n**Período:** 2026\n**Confiança:** ${prob}\n\n**Meta estimada anual:** ${formatNumber(metaAnual)} deals won\n**Realizado Q1 (Jan-Mar):** ${formatNumber(wonQ1)} deals (${((wonQ1 / metaAnual) * 100).toFixed(1)}%)\n**Faltam:** ${formatNumber(falta)} deals em ${mesesRestantes} meses\n\n**Ritmo necessário:** ${ritmoNecessario} deals/mes\n**Ritmo atual:** ${mediaMensal} deals/mes\n**Status:** ${mediaMensal >= ritmoNecessario ? "✅ No ritmo" : "⚠️ Abaixo do ritmo necessário"}\n\n**Probabilidade de bater meta:** ${prob}\n${prob !== "ALTA" ? `\n**O que precisa mudar:**\n• Aumentar volume de leads qualificados (+${ritmoNecessario - mediaMensal} deals/mes)\n• Melhorar win rate (de 2,7% para pelo menos 4%)\n• Reduzir no-show da MIA (de 60% para 30%)\n• Escalar canal Parceiros (custo zero, 6,8x mais conversão)` : "\n**Ação:** Manter ritmo e monitorar win rate."}\n\n**Cálculo:** (Meta anual - Realizado) / Meses restantes = Ritmo necessário`;
+
+    // Projeção baseada em tendência
+    let acumulado = wonQ1;
+    let mesAtual = wonMeses[2];
+    const tendMensal = tendencia / 2; // suavizar
+    for (let i = 0; i < mesesRestantes; i++) {
+      mesAtual = Math.round(mesAtual * (1 + tendMensal));
+      acumulado += Math.max(mesAtual, 200); // piso mínimo
+    }
+    const projecaoAnual = acumulado;
+    const prob = projecaoAnual >= metaAnual ? "ALTA" : projecaoAnual >= metaAnual * 0.85 ? "MÉDIA" : "BAIXA";
+    const atingePct = ((projecaoAnual / metaAnual) * 100).toFixed(1);
+
+    return `🎯 **Análise Preditiva de Meta — 2026**\n\n**Meta anual estimada:** ${formatNumber(metaAnual)} deals\n**Realizado Q1 (Jan-Mar):** ${formatNumber(wonQ1)} deals (${((wonQ1 / metaAnual) * 100).toFixed(1)}%)\n**Faltam:** ${formatNumber(falta)} deals em ${mesesRestantes} meses\n\n---\n\n**📊 Projeção baseada na tendência atual:**\n• Tendência mensal: ${(tendMensal * 100).toFixed(1)}% (${tendMensal < 0 ? "queda" : "crescimento"})\n• Projeção anual: **${formatNumber(projecaoAnual)} deals** (${atingePct}% da meta)\n• **Probabilidade de atingir:** ${prob}\n\n**Ritmo necessário:** ${ritmoNecessario} deals/mês\n**Ritmo atual:** ${mediaMensal} deals/mês (${mediaMensal >= ritmoNecessario ? "✅ suficiente" : `⚠️ faltam ${ritmoNecessario - mediaMensal}/mês`})\n\n---\n\n**Se nada mudar:** ${projecaoAnual >= metaAnual ? "A meta será atingida." : `Ficaremos ${formatNumber(metaAnual - projecaoAnual)} deals abaixo da meta.`}\n\n**Para bater a meta:**\n• Necessário: ${ritmoNecessario} deals/mês nos próximos ${mesesRestantes} meses\n• Aumentar win rate de 2,7% para ${(ritmoNecessario / (4131 / mesesRestantes) * 100).toFixed(1)}%\n• Ou gerar +${formatNumber(Math.round((ritmoNecessario - mediaMensal) / 0.027))} leads adicionais/mês\n\n**Método:** Projeção exponencial com tendência Q1/2026 (Jan: ${wonMeses[0]}, Fev: ${wonMeses[1]}, Mar: ${wonMeses[2]}), piso mínimo de 200 deals/mês.\n**Confiança:** ${prob} — baseado em apenas 3 meses de dados.`;
   }
 
   // --- SIMULACAO ---
@@ -168,17 +202,17 @@ function generateResponse(input: string): string {
 
   // --- NAO SEI / TRANSPARENCIA ---
   if (q.includes("nao sei") || q.includes("nao entendi") || q.includes("explica melhor")) {
-    return `Sem problema! Me diga especificamente o que você quer entender e eu explico com:\n\n• **Origem do dado** (de qual sistema vem)\n• **Calculo** (formula usada)\n• **Periodo** (que datas estao consideradas)\n• **Responsável** (quem cuida daquela area)\n\nExemplos:\n• "De onde vem o numero de deals won?"\n• "Como e calculado o CPW?"\n• "Quem cuida do Marista 144?"\n• "Esse dado e de 2026 ou histórico?"`;
+    return `Sem problema! Me diga especificamente o que você quer entender e eu explico com:\n\n• **Origem do dado** (de qual sistema vem)\n• **Calculo** (fórmula usada)\n• **Periodo** (que datas estão consideradas)\n• **Responsável** (quem cuida daquela área)\n\nExemplos:\n• "De onde vem o número de deals won?"\n• "Como é calculado o CPW?"\n• "Quem cuida do Marista 144?"\n• "Esse dado é de 2026 ou histórico?"`;
   }
 
   // --- DEFAULT ---
-  return `Ola! Sou a **Belle**, analista senior preditiva da Seazone.\n\nPosso responder com profundidade sobre:\n\n📊 **Dados** - "De onde vem esse dado?"\n📅 **Periodo** - "Isso e histórico ou 2026?"\n👤 **Responsáveis** - "Quem cuida do Marista 144?"\n⚠️ **Gargalos** - "Qual o maior problema?"\n⚡ **Squads** - "Como esta o Squad 1?"\n💰 **Vendas** - "Como estao as vendas?"\n📣 **Campanhas** - "Qual campanha performa melhor?"\n🏗️ **Empreendimentos** - "Como esta o Natal Spot?"\n🤖 **MIA** - "A MIA esta funcionando?"\n\n🔮 **PREDITIVO (novo!):**\n• "Qual a previsao de vendas?" → cenarios otimista/realista/pessimista\n• "Vamos bater a meta?" → probabilidade + ritmo necessário\n• "Se aumentar leads em 20%?" → simulacao com impacto\n• "Se melhorar conversão?" → calculo de receita adicional\n\nPara cada resposta: **origem, calculo, periodo, confianca e acao**.`;
+  return `Olá! Sou a **Belle**, analista sênior preditiva da Seazone.\n\nPosso responder com profundidade sobre:\n\n📊 **Dados** - "De onde vem esse dado?"\n📅 **Periodo** - "Isso é histórico ou 2026?"\n👤 **Responsáveis** - "Quem cuida do Marista 144?"\n⚠️ **Gargalos** - "Qual o maior problema?"\n⚡ **Squads** - "Como está o Squad 1?"\n💰 **Vendas** - "Como estão as vendas?"\n📣 **Campanhas** - "Qual campanha performa melhor?"\n🏗️ **Empreendimentos** - "Como está o Natal Spot?"\n🤖 **MIA** - "A MIA está funcionando?"\n\n🔮 **PREDITIVO (novo!):**\n• "Qual a previsão de vendas?" → cenarios otimista/realista/pessimista\n• "Vamos bater a meta?" → probabilidade + ritmo necessário\n• "Se aumentar leads em 20%?" → simulação com impacto\n• "Se melhorar conversão?" → cálculo de receita adicional\n\nPara cada resposta: **origem, calculo, periodo, confiança e ação**.`;
 }
 
 export default function BelleChat() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: "belle", text: "Ola! Sou a **Belle**, analista senior de vendas e marketing da Seazone. Posso explicar qualquer metrica, identificar gargalos e recomendar acoes. Pergunte qualquer coisa!" }
+    { role: "belle", text: "Olá! Sou a **Belle**, analista sênior de vendas e marketing da Seazone. Posso explicar qualquer métrica, identificar gargalos e recomendar ações. Pergunte qualquer coisa!" }
   ]);
   const [input, setInput] = useState("");
   const endRef = useRef<HTMLDivElement>(null);

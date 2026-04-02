@@ -33,7 +33,7 @@ export default function EmpreendimentoPage() {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <p className="text-gray-400 text-lg">Empreendimento nao encontrado</p>
+          <p className="text-gray-400 text-lg">Empreendimento não encontrado</p>
           <p className="text-xs text-gray-500 mt-1">Slug: {slug}</p>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function EmpreendimentoPage() {
       {!hasFullFunnel && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3">
           <p className="text-xs text-yellow-700">
-            <strong>Aviso:</strong> Este empreendimento nao possui funil histórico completo. Exibindo dados disponiveis de 2026 (RD Station, Facebook Ads, Squads).
+            <strong>Aviso:</strong> Este empreendimento não possui funil histórico completo. Exibindo dados disponíveis de 2026 (RD Station, Facebook Ads, Squads).
           </p>
         </div>
       )}
@@ -171,7 +171,7 @@ export default function EmpreendimentoPage() {
               <p className="text-2xl font-bold text-[#0F1B2D]">{formatNumber(rdEmp?.conversoes || emp2026?.conversoes2026 || 0)}</p>
               <p className="text-xs text-gray-400 mt-1">conversoes (RD Station)</p>
               <p className="text-lg font-semibold text-[#F06B5D] mt-2">{formatNumber(rdEmp?.contatos || emp2026?.contatos || 0)}</p>
-              <p className="text-xs text-gray-400">contatos unicos</p>
+              <p className="text-xs text-gray-400">contatos únicos</p>
             </>
           ) : (
             <p className="text-sm text-gray-400">Sem dados de conversao em 2026</p>

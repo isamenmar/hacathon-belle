@@ -110,7 +110,7 @@ export default function SquadsPage() {
                   <thead>
                     <tr className="text-gray-500 border-b border-gray-200">
                       <th className="text-left py-1.5 px-2">Nome</th>
-                      <th className="text-center py-1.5 px-2">Funcao</th>
+                      <th className="text-center py-1.5 px-2">Função</th>
                       <th className="text-right py-1.5 px-2">Calls</th>
                       <th className="text-right py-1.5 px-2">WhatsApp</th>
                       <th className="text-right py-1.5 px-2">Reunioes</th>
