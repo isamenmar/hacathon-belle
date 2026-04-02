@@ -42,9 +42,9 @@ export default function TimePage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard label="Total Atividades 2026" value={formatNumber(totalActivities)} subtitle="Jan-Mar/2026" highlight />
-        <KpiCard label="Reuniões 2026" value={formatNumber(totalReunions)} />
-        <KpiCard label="Contratos 2026" value={formatNumber(totalContratos)} />
-        <KpiCard label="Analistas Ativos" value={String(teamPerformers2026.length)} />
+        <KpiCard label="Reuniões 2026" value={formatNumber(totalReunions)} subtitle="2026 (Jan-Mar)" />
+        <KpiCard label="Contratos 2026" value={formatNumber(totalContratos)} subtitle="2026 (Jan-Mar)" />
+        <KpiCard label="Analistas Ativos" value={String(teamPerformers2026.length)} subtitle="2026 (Jan-Mar)" />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-4">

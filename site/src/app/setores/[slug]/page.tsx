@@ -34,11 +34,11 @@ export default function SetorPage() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <KpiCard label="Won 2026" value={formatNumber(setor.wonTotal)} highlight />
-        <KpiCard label="Lost 2026" value={formatNumber(setor.lostTotal)} trend="down" trendValue={`${winRate}% win rate`} />
-        <KpiCard label="Valor Total" value={setor.valorTotal > 0 ? formatCurrency(setor.valorTotal) : "N/A"} />
+        <KpiCard label="Won 2026" value={formatNumber(setor.wonTotal)} subtitle="Jan-Mar/2026" highlight />
+        <KpiCard label="Lost 2026" value={formatNumber(setor.lostTotal)} subtitle="Jan-Mar/2026" trend="down" trendValue={`${winRate}% win rate`} />
+        <KpiCard label="Valor Total" value={setor.valorTotal > 0 ? formatCurrency(setor.valorTotal) : "N/A"} subtitle="Acumulado 2026" />
         <KpiCard label="Leads Abertos" value={formatNumber(setor.leadsAbertos)} subtitle="Snapshot atual" />
-        <KpiCard label="Pipeline" value={`#${setor.pipeline}`} />
+        <KpiCard label="Pipeline" value={`#${setor.pipeline}`} subtitle="Identificador" />
       </div>
 
       {setor.cpl > 0 && (

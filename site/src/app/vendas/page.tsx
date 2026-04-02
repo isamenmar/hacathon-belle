@@ -79,10 +79,10 @@ export default function VendasPage() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard label="Valor Total Vendido" value={formatCurrency(totalValor)} highlight />
-        <KpiCard label="Nº de Vendas" value={String(totalDeals)} />
-        <KpiCard label="Ticket Médio" value={formatCurrency(ticketMedio)} />
-        <KpiCard label="Vendedores Ativos" value={String(byVendedor.length)} />
+        <KpiCard label="Valor Total Vendido" value={formatCurrency(totalValor)} subtitle="2026 (Jan-Mar)" highlight />
+        <KpiCard label="Nº de Vendas" value={String(totalDeals)} subtitle="2026 (Jan-Mar)" />
+        <KpiCard label="Ticket Médio" value={formatCurrency(ticketMedio)} subtitle="2026 (Jan-Mar)" />
+        <KpiCard label="Vendedores Ativos" value={String(byVendedor.length)} subtitle="2026 (Jan-Mar)" />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-4">

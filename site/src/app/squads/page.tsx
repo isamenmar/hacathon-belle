@@ -44,11 +44,11 @@ export default function SquadsPage() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <KpiCard label="Squads Ativos" value={String(squads.length)} highlight />
-        <KpiCard label="Membros" value={String(totalMembros)} subtitle="Pre-vendas + Closers" />
-        <KpiCard label="Leads Totais" value={formatNumber(totalLeads)} />
-        <KpiCard label="Won Total" value={formatNumber(totalWon)} trend="up" trendValue={`${((totalWon / totalLeads) * 100).toFixed(2)}%`} />
-        <KpiCard label="Alertas" value={String(totalAlertas)} trend={totalAlertas > 5 ? "down" : "up"} trendValue={totalAlertas > 5 ? "Atenção" : "OK"} />
+        <KpiCard label="Squads Ativos" value={String(squads.length)} subtitle="Estrutura atual" highlight />
+        <KpiCard label="Membros" value={String(totalMembros)} subtitle="Ativos em 2026" />
+        <KpiCard label="Leads Totais" value={formatNumber(totalLeads)} subtitle="Acumulado historico" />
+        <KpiCard label="Won Total" value={formatNumber(totalWon)} subtitle="Acumulado historico" trend="up" trendValue={`${((totalWon / totalLeads) * 100).toFixed(2)}%`} />
+        <KpiCard label="Alertas" value={String(totalAlertas)} subtitle="Ativos agora" trend={totalAlertas > 5 ? "down" : "up"} trendValue={totalAlertas > 5 ? "Atenção" : "OK"} />
       </div>
 
       {/* Squad Cards */}

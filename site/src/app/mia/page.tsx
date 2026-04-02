@@ -47,11 +47,11 @@ export default function MiaPage() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        <KpiCard label="Total Atividades" value={formatNumber(miaData.totalAtividades)} subtitle={`#${miaData.ranking} no ranking`} highlight />
-        <KpiCard label="Reuniões Agendadas" value={formatNumber(miaData.reunioesAgendadas)} trend="up" trendValue="7,8x vs humanos" />
-        <KpiCard label="No-Shows" value={formatNumber(miaData.noShows)} trend="down" trendValue="46,2%" />
-        <KpiCard label="Reuniões Efetivas" value={formatNumber(reunioesEfetivas)} subtitle={`${(100 - miaData.taxaNoShow).toFixed(1)}% efetividade`} />
-        <KpiCard label="Contratos" value={String(miaData.contratos)} trend="down" trendValue="Precisa melhorar" />
+        <KpiCard label="Total Atividades" value={formatNumber(miaData.totalAtividades)} subtitle={`#${miaData.ranking} no ranking | 2026 (Jan-Mar)`} highlight />
+        <KpiCard label="Reuniões Agendadas" value={formatNumber(miaData.reunioesAgendadas)} subtitle="2026 (Jan-Mar)" trend="up" trendValue="7,8x vs humanos" />
+        <KpiCard label="No-Shows" value={formatNumber(miaData.noShows)} subtitle="2026 (Jan-Mar)" trend="down" trendValue="46,2%" />
+        <KpiCard label="Reuniões Efetivas" value={formatNumber(reunioesEfetivas)} subtitle={`${(100 - miaData.taxaNoShow).toFixed(1)}% efetividade | 2026 (Jan-Mar)`} />
+        <KpiCard label="Contratos" value={String(miaData.contratos)} subtitle="2026 (Jan-Mar)" trend="down" trendValue="Precisa melhorar" />
       </div>
 
       <div className="bg-red-50 border border-red-200 rounded-xl p-4">
